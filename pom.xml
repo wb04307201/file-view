@@ -18,7 +18,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.3.1</version>
+                <version>3.3.4</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -30,7 +30,7 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.5.6</version>
+                <version>1.5.8</version>
             </dependency>
 
             <!-- Spire.Office for Java -->
@@ -44,31 +44,31 @@
             <dependency>
                 <groupId>org.jodconverter</groupId>
                 <artifactId>jodconverter-local</artifactId>
-                <version>4.4.7</version>
+                <version>4.4.8</version>
             </dependency>
             <dependency>
                 <groupId>org.jodconverter</groupId>
                 <artifactId>jodconverter-local-lo</artifactId>
-                <version>4.4.7</version>
+                <version>4.4.8</version>
             </dependency>
             <dependency>
                 <groupId>org.jodconverter</groupId>
                 <artifactId>jodconverter-spring-boot-starter</artifactId>
-                <version>4.4.7</version>
+                <version>4.4.8</version>
             </dependency>
 
             <!-- 解压缩 commons-compress-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.26.2</version>
+                <version>1.27.1</version>
             </dependency>
 
             <!-- JWT -->
             <dependency>
                 <groupId>io.fusionauth</groupId>
                 <artifactId>fusionauth-jwt</artifactId>
-                <version>5.3.2</version>
+                <version>5.3.3</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/jakarta.transaction/jakarta.transaction-api -->
