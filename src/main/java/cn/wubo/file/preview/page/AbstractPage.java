@@ -51,18 +51,33 @@ public abstract class AbstractPage implements IPage {
         }
     }
 
+    /**
+     * 生成文件预览的输出流响应
+     *
+     * 本方法通过获取文件内容的字节数组，准备一个服务器响应对象，该对象包含文件的MIME类型和内容长度
+     * 最终将文件内容写入到HTTP请求的输出流中
+     *
+     * @return ServerResponse 构建的服务器响应对象，包含文件预览的输出流
+     * @throws PageRuntimeException 当文件IO操作失败时抛出此异常，包含IO异常信息
+     */
     protected ServerResponse commonOutputStream() {
+        // 获取文件内容的字节数组
         byte[] bytes = filePreviewService.getBytes(info);
         try {
+            // 构建服务器响应对象，设置响应类型为文件的MIME类型，设置内容长度为字节数组长度
             return ServerResponse.ok().contentType(MediaType.parseMediaType(FileUtils.getMimeType(getInfo().getFileName()))).contentLength(bytes.length).build((res, req) -> {
+                // 将字节数组写入到HTTP请求的输出流中
                 try (OutputStream os = req.getOutputStream()) {
                     IoUtils.writeToStream(bytes, os);
                 } catch (IOException e) {
+                    // 当IO操作失败时，抛出运行时异常，包含IO异常信息
                     throw new PageRuntimeException(e.getMessage(), e);
                 }
+                // 返回一个新的模型和视图对象，作为响应体内容
                 return new ModelAndView();
             });
         } catch (IOException e) {
+            // 当构建服务器响应过程中发生IO异常时，抛出运行时异常，包含IO异常信息
             throw new PageRuntimeException(e.getMessage(), e);
         }
     }
