@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Epub</title>
-    <link href="${contextPath}/file/preview/static/layui/2.9.6/css/layui.css" rel="stylesheet">
-    <script type="text/javascript" src="${contextPath}/file/preview/static/layui/2.9.6/layui.js"></script>
+    <link href="${contextPath}/file/preview/static/layui/2.9.17/css/layui.css" rel="stylesheet">
+    <script type="text/javascript" src="${contextPath}/file/preview/static/layui/2.9.17/layui.js"></script>
     <script type="text/javascript" src="${contextPath}/file/preview/static/jszip/3.10.1/jszip.min.js"></script>
     <script type="text/javascript" src="${contextPath}/file/preview/static/epub.js/0.3.88/epub.min.js"></script>
     <style>

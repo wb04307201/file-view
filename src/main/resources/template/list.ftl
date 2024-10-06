@@ -5,8 +5,8 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="${contextPath}/file/preview/static/layui/2.9.6/css/layui.css"/>
-    <script type="text/javascript" src="${contextPath}/file/preview/static/layui/2.9.6/layui.js"></script>
+    <link rel="stylesheet" type="text/css" href="${contextPath}/file/preview/static/layui/2.9.17/css/layui.css"/>
+    <script type="text/javascript" src="${contextPath}/file/preview/static/layui/2.9.17/layui.js"></script>
     <style>
         body {
             padding: 10px 20px 10px 20px;
