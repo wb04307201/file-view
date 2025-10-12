@@ -22,23 +22,6 @@
 
 ---
 
-## 使用的第三方库
-
-| 文件类型         | 第三方库                                                                 | 示例                                                                                                                                            |
-|--------------|----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| office文件     | [vue-office](https://github.com/501351981/vue-office)                | <img src="img_13.png" width="20%" height="20%"><img src="img_14.png" width="20%" height="20%"><img src="img_15.png" width="20%" height="20%"> |
-| 业务流程管理文件     | [bpmn-io](https://github.com/bpmn-io)                                | <img src="img_1.png" width="20%" height="20%"><img src="img_2.png" width="20%" height="20%"><img src="img_3.png"  width="20%" height="20%">   |
-| 图片文件         | [viewerjs](https://github.com/fengyuanchen/viewerjs)                 | <img src="img_4.png" width="20%" height="20%">                                                                                                |
-| 文档文件(pdf)    | [pdfobject](https://github.com/pipwerks/PDFObject)                   | <img src="img_5.png" width="20%" height="20%">                                                                                                |
-| 文档文件(ofd)    | [ofd.js](https://github.com/DLTech21/ofd.js)                         | <img src="img_16.png" width="20%" height="20%">                                                                                               |
-| 文档文件(epub)   | [epub.js](https://github.com/futurepress/epub.js/)                   | <img src="img_6.png" width="20%" height="20%">                                                                                                |
-| 文本文件/代码文件    | [highlight.js](https://github.com/highlightjs/highlight.js)          | <img src="img_7.png" width="20%" height="20%"><img src="img_8.png" width="20%" height="20%"><img src="img_9.png" width="20%" height="20%">    |
-| Markdown文档文件 | [vditor](https://github.com/Vanessa219/vditor)                       | <img src="img_10.png" width="20%" height="20%">                                                                                               |
-| 3D模型文件       | [Online3DViewer](https://github.com/kovacsv/Online3DViewer)          | <img src="img_17.png" width="20%" height="20%"><img src="img_18.png" width="20%" height="20%">                                                |
-| 思维导图文件       | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) | <img src="img_11.png" width="20%" height="20%">                                                                                               |
-| 压缩文件         | [jszip](https://github.com/Stuk/jszip)                               | <img src="img_12.png" width="20%" height="20%">                                                                                               |
-
-
 ## 引入
 
 ### 增加 JitPack 仓库
@@ -149,6 +132,24 @@ syntaxAndPattern通过指定语法（如 glob 或 regex）对文件名进行匹�
 ### 访问内置界面进行文件上传和预览
 访问 `http://localhost:8080/file/view`
 ![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
+![img_3.png](img_3.png)
+![img_4.png](img_4.png)
+![img_5.png](img_5.png)
+![img_6.png](img_6.png)
+![img_7.png](img_7.png)
+![img_8.png](img_8.png)
+![img_9.png](img_9.png)
+![img_10.png](img_10.png)
+![img_11.png](img_11.png)
+![img_12.png](img_12.png)
+![img_13.png](img_13.png)
+![img_14.png](img_14.png)
+![img_15.png](img_15.png)
+![img_16.png](img_16.png)
+![img_17.png](img_17.png)
+![img_18.png](img_18.png)
 
 ### 预览扩展
 下面以OnlyOffice为例说明如何扩展预览
@@ -290,10 +291,9 @@ file:
 ```
 
 3. 预览效果如下
-<img src="img_19.png" width="20%" height="20%">
-<img src="img_20.png" width="20%" height="20%">
-<img src="img_21.png" width="20%" height="20%">
-
+![img_19.png](img_19.png)
+![img_20.png](img_20.png)
+![img_21.png](img_21.png)
 
 ### 文件存储扩展
 下面以MinIO为例说明如何扩展文件存储
@@ -432,6 +432,23 @@ public class MinioFileStorageImpl implements IFileStorage {
     }
 }
 ```
+
+## 使用的第三方库
+
+| 文件类型         | 第三方库                                                                 |
+|--------------|----------------------------------------------------------------------|
+| office文件     | [vue-office](https://github.com/501351981/vue-office)                |
+| 业务流程管理文件     | [bpmn-io](https://github.com/bpmn-io)                                |
+| 图片文件         | [viewerjs](https://github.com/fengyuanchen/viewerjs)                 |
+| 文档文件(pdf)    | [pdfobject](https://github.com/pipwerks/PDFObject)                   |
+| 文档文件(ofd)    | [ofd.js](https://github.com/DLTech21/ofd.js)                         |
+| 文档文件(epub)   | [epub.js](https://github.com/futurepress/epub.js/)                   |
+| 文本文件/代码文件    | [highlight.js](https://github.com/highlightjs/highlight.js)          |
+| Markdown文档文件 | [vditor](https://github.com/Vanessa219/vditor)                       |
+| 3D模型文件       | [Online3DViewer](https://github.com/kovacsv/Online3DViewer)          |
+| 思维导图文件       | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) |
+| 压缩文件         | [jszip](https://github.com/Stuk/jszip)                               |
+
 
 
 
