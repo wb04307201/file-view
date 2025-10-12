@@ -39,7 +39,6 @@
         <spring-boot.version>3.5.6</spring-boot.version>
         <lombok.version>1.18.38</lombok.version>
         <logback.version>1.5.18</logback.version>
-        <spire.version>5.4.0</spire.version>
     </properties>
 
     <dependencyManagement>
@@ -60,36 +59,6 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>e-iceblue</groupId>
-                <artifactId>spire.office.free</artifactId>
-                <version>5.4.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jodconverter</groupId>
-                <artifactId>jodconverter-local</artifactId>
-                <version>4.4.7</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jodconverter</groupId>
-                <artifactId>jodconverter-local-lo</artifactId>
-                <version>4.4.7</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jodconverter</groupId>
-                <artifactId>jodconverter-spring-boot-starter</artifactId>
-                <version>4.4.7</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-compress</artifactId>
-                <version>1.26.2</version>
-            </dependency>
-            <dependency>
-                <groupId>io.fusionauth</groupId>
-                <artifactId>fusionauth-jwt</artifactId>
-                <version>5.3.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
