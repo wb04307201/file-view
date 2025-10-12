@@ -150,8 +150,8 @@ syntaxAndPattern通过指定语法（如 glob 或 regex）对文件名进行匹�
 访问 `http://localhost:8080/file/view`
 ![img.png](img.png)
 
-### 自定义渲染器
-下面以OnlyOffice为例说明如何自定义渲染器
+### 预览扩展
+下面以OnlyOffice为例说明如何扩展预览
 1. 使用docker安装OnlyOffice文档开发者版，[更详细内容请查看](https://api.onlyoffice.com/docs/docs-api/get-started/basic-concepts/)
 ```bash
 docker run --name onlyoffice -i -t -d -p 80:80 -e JWT_ENABLED=false -e ALLOW_PRIVATE_IP_ADDRESS=true onlyoffice/documentserver-de
@@ -296,7 +296,7 @@ file:
 
 
 ### 文件存储扩展
-下面以MinIO为例说明如何自定义渲染器
+下面以MinIO为例说明如何扩展文件存储
 1. 使用docker安装MinIO
 ```bash
 docker run -p 9000:9000 -p 9001:9001 --name minio -e "MINIO_ROOT_USER=ROOTUSER" -e "MINIO_ROOT_PASSWORD=CHANGEME123" quay.io/minio/minio server /data --console-address ":9001"
