@@ -1,18 +1,17 @@
 # File View 文件预览
 
-> 一个轻量级文件预览的starter组件，支持多种文档和媒体格式的在线预览。
-> office文件(docx,xlsx,xls,pptx)
-> 业务流程管理文件(bpmn,dmn,cmmn)
-> 图片文件
-> 视频文件
-> 音频文件
-> 文档文件(pdf,ofd，epub)
-> 文本文件/代码文件(sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
-> Markdown文档文件
-> 3D模型文件(3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl)
-> 思维导图文件(xmind)
-> 压缩文件(zip)
-> 采用模块化架构，易于扩展和定制
+> 一个轻量级文件预览的starter组件，支持多种文档和媒体格式的在线预览，采用模块化架构，易于扩展和定制。
+> - office文件(docx,xlsx,xls,pptx)
+> - 业务流程管理文件(bpmn,dmn,cmmn)
+> - 图片文件
+> - 视频文件
+> - 音频文件
+> - 文档文件(pdf,ofd，epub)
+> - 文本文件/代码文件(sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
+> - Markdown文档文件
+> - 3D模型文件(3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl)
+> - 思维导图文件(xmind)
+> - 压缩文件(zip)
 
 [![](https://jitpack.io/v/com.gitee.wb04307201/file-view.svg)](https://jitpack.io/#com.gitee.wb04307201/file-view)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
