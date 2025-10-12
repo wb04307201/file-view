@@ -1,2 +1,2 @@
-*.js linguist-language=java
-*.css linguist-language=java
+/mvnw text eol=lf
+*.cmd text eol=crlf

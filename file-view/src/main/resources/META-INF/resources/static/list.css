@@ -1,0 +1,283 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #2d3748;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 表格样式 */
+.table-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.table-header {
+    margin-bottom: 20px;
+}
+
+.table-header h4 {
+    color: #333;
+    font-size: 1.4em;
+}
+
+/* 控制面板 */
+.control-panel {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+}
+
+.btn-toggle {
+    background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
+}
+
+.btn-toggle:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(237, 137, 54, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+}
+
+.btn-success:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(72, 187, 120, 0.4);
+}
+
+/* 加载动画 */
+.loading {
+    text-align: center;
+    padding: 20px;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #4a90e2;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 空状态 */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+/* 表格容器样式 - 控制滚动 */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto; /* 横向滚动 */
+    overflow-y: auto; /* 纵向滚动 */
+    height: calc(100vh - 270px);
+    margin: 20px 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* 表格基础样式 */
+table {
+    width: 100%;
+    font-size: 0.9rem;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 表头样式 */
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+thead th {
+    background: #667eea;
+    color: white;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    position: relative;
+}
+
+/* 表格内容样式 */
+tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.3);
+}
+
+tbody td {
+    padding: 12px 15px;
+    color: #333;
+}
+
+/* 斑马纹效果 */
+tbody tr:nth-child(even) {
+    background-color: rgba(102, 126, 234, 0.2);
+}
+
+tbody tr:nth-child(even):hover {
+    background-color: rgba(102, 126, 234, 0.3);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+/* 选择文本样式 */
+::selection {
+    background: rgba(102, 126, 234, 0.3);
+    color: #2d3748;
+}
+
+#toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    right: 30px;
+    top: 30px;
+    font-size: 17px;
+    z-index: 1000;
+}
+
+#toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {top: 30px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
+
+.upload-section {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.file-input {
+    display: none;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    thead th,
+    tbody td {
+        padding: 5px 8px;
+        font-size: 0.9em;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .table-wrapper{
+        height: auto;
+    }
+}

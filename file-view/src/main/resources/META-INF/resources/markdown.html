@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>markdown</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body, #content {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="content"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/vditor/3.11.2/index.css',
+                cdn: 'https://cdn.jsdelivr.net/npm/vditor/dist/index.min.css',
+                type: 'css'
+            },
+            {
+                url: '/static/vditor/3.11.2/index.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/vditor/dist/index.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    function load(){
+        const id = getUrlParam('id');
+
+        fetch(`/wopi/files/${id}/contents`)
+            .then(response => response.text())
+            .then(text => {
+                Vditor.preview(document.getElementById('content'), text, {})
+            })
+            .catch(error => {
+                console.error('could not fetch file content', error);
+                alert(error.message);
+            });
+    }
+</script>
+</body>
+</html>

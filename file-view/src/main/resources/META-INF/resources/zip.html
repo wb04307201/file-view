@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZIP File Viewer</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        #container {
+            display: flex;
+            height: 100%;
+            max-width: 100vw;
+        }
+
+        #left-panel {
+            width: 60%;
+            border-right: 1px solid #dee2e6;
+            overflow-y: auto;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        #right-panel {
+            width: 40%;
+            padding: 20px;
+            overflow-y: auto;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        #file-table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        #file-table th, #file-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        #file-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        #file-table tr:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #file-content {
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            /*max-height: 80vh;*/
+            height: calc(100% - 105px);
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .directory-row {
+            background-color: #e9f7fe;
+        }
+
+        .directory-row:hover {
+            background-color: #d8f0fd !important;
+        }
+
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .directory-download {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .directory-download:hover {
+            background-color: #6c757d;
+            transform: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .file-size {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .file-type {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .type-file {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+        .type-directory {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+    </style>
+
+</head>
+<body>
+<div id="container">
+    <div id="left-panel">
+        <table id="file-table">
+            <thead>
+            <tr>
+                <th>文件名</th>
+                <th>类型</th>
+                <th>大小</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="file-table-body">
+            <!-- 文件列表将在这里动态生成 -->
+            </tbody>
+        </table>
+    </div>
+    <div id="right-panel">
+        <h2>文件内容</h2>
+        <div id="file-content">请选择一个文件查看内容</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/jszip/3.10.1/jszip.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/jszip/dist/jszip.min.js',
+                type: 'js'
+            },
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    async function load() {
+        const id = getUrlParam('id');
+        const fileTableBody = document.getElementById('file-table-body');
+        const fileContentDiv = document.getElementById('file-content');
+
+        try {
+            const response = await fetch(`/wopi/files/${id}/contents`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const arrayBuffer = await response.arrayBuffer();
+
+            // 加载 ZIP 数据
+            const zip = new JSZip();
+            const zipData = await zip.loadAsync(arrayBuffer);
+
+            // 清空表格内容
+            fileTableBody.innerHTML = '';
+
+            // 存储文件数据用于后续访问
+            window.zipFiles = {};
+
+            // 遍历 ZIP 文件内容并填充表格
+            for (const relativePath in zipData.files) {
+                const fileEntry = zipData.files[relativePath];
+                const isDirectory = fileEntry.dir;
+
+                // 创建表格行
+                const row = document.createElement('tr');
+                if (isDirectory) {
+                    row.classList.add('directory-row');
+                }
+
+                // 添加文件信息到行中
+                row.innerHTML = `
+                    <td>${relativePath}</td>
+                    <td><span class="file-type ${isDirectory ? 'type-directory' : 'type-file'}">${isDirectory ? '文件夹' : '文件'}</span></td>
+                    <td class="file-size">${isDirectory ? '-' : fileEntry._data.uncompressedSize + ' bytes'}</td>
+                    <td>
+                        <button class="download-btn ${isDirectory ? 'directory-download' : ''}"${isDirectory ? 'disabled' : ''}>
+                            下载
+                        </button>
+                    </td>
+                `;
+
+
+                // 如果不是文件夹，添加点击事件
+                if (!isDirectory) {
+                    window.zipFiles[relativePath] = fileEntry;
+                    row.addEventListener('click', (event) => {
+                        // 只有点击非按钮区域才显示文件内容
+                        if (event.target.tagName !== 'BUTTON') {
+                            showFileContent(relativePath);
+                        }
+                    });
+
+                    // 为下载按钮添加事件监听器
+                    const downloadBtn = row.querySelector('.download-btn');
+                    downloadBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        downloadFile(relativePath);
+                    });
+                } else {
+                    row.style.cursor = 'default';
+                }
+
+                fileTableBody.appendChild(row);
+            }
+
+            // 如果有文件，自动显示第一个文件的内容
+            const firstFileName = Object.keys(zipData.files).find(name => !zipData.files[name].dir);
+            if (firstFileName) {
+                showFileContent(firstFileName);
+            }
+
+        } catch (error) {
+            console.error('加载ZIP文件出错:', error);
+            fileContentDiv.textContent = '加载文件时出错: ' + error.message;
+        }
+    }
+
+    async function showFileContent(fileName) {
+        const fileContentDiv = document.getElementById('file-content');
+
+        const fileEntry = window.zipFiles[fileName];
+        fileEntry.async('text').then(function (content) {
+            // fileContentDiv.textContent = `${content.substring(0, 5000)}...`;
+            fileContentDiv.textContent = content;
+        }).catch(function (error) {
+            console.error('文件读取出错:', error);
+            fileContentDiv.textContent = `无法显示 "${fileName}" 的内容。`;
+        });
+    }
+
+    async function downloadFile(fileName) {
+        try {
+            const fileEntry = window.zipFiles[fileName];
+            const content = await fileEntry.async('blob');
+            const url = URL.createObjectURL(content);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName.split('/').pop(); // 获取文件名部分
+            document.body.appendChild(a);
+            a.click();
+
+            // 清理创建的URL对象
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        } catch (error) {
+            console.error('文件下载出错:', error);
+            alert('文件下载失败: ' + error.message);
+        }
+    }
+</script>
+</body>
+</html>

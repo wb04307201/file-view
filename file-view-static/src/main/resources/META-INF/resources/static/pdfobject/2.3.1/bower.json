@@ -1,0 +1,27 @@
+{
+  "name": "pdfobject",
+  "description": "A lightweight JavaScript utility for dynamically embedding PDFs in HTML documents",
+  "version": "2.3.1",
+  "main": "pdfobject.js",
+  "moduleType": [
+	  "globals",
+	  "amd",
+	  "node"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "pdf",
+    "pdfobject"
+  ],
+  "authors": [
+  	"Philip Hutchison <philip@pipwerks.com> (http://pipwerks.com)"
+  ],
+  "homepage": "http://pdfobject.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pipwerks/PDFObject.git"
+  },
+  "ignore": [
+    "node_modules"
+  ]
+}

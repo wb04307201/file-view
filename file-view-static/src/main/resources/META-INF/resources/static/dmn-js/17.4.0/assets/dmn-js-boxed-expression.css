@@ -1,0 +1,186 @@
+.dmn-boxed-expression-container {
+  --element-properties-background-color: var(--color-white);
+  --element-properties-border-color: var(--color-grey-225-10-15);
+  --element-properties-color: var(--color-grey-225-10-15);
+  --boxed-expression-color: var(--color-grey-225-10-15);
+  --boxed-expression-properties-border-color: var(--color-grey-225-10-15);
+  --boxed-expression-properties-color: var(--color-grey-225-10-15);
+  --powered-by-overlay-background-color: var(--color-black-opacity-20);
+  --powered-by-overlay-content-background-color: var(--color-white);
+  --powered-by-overlay-content-border-color: var(--color-grey-225-10-75);
+  --powered-by-overlay-content-color: var(--color-grey-225-10-15);
+  --textarea-border-color: var(--color-grey-225-10-15);
+  --textarea-color: var(--color-grey-225-10-15);
+  --view-drd-button-background-color: var(--color-white);
+  --view-drd-button-border-color: var(--color-grey-225-10-75);
+  --view-drd-button-color: var(--color-grey-225-10-15);
+  --view-drd-button-hover-background-color: var(--color-grey-225-10-97);
+  --boxed-expression-font-family: 'Arial', sans-serif;
+  --boxed-expression-font-family-monospace: monospace;
+  --section-padding: 20px;
+  --padding: 12px;
+  --font-size: 14px;
+  --font-size-big: 16px;
+  --font-size-bigger: 21px;
+
+  font-family: var(--boxed-expression-font-family);
+  color: var(--boxed-expression-color);
+  width: 100%;
+  height: 100%;
+}
+
+.dmn-boxed-expression-container .viewer-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size);
+}
+
+.dmn-boxed-expression-container * {
+  box-sizing: border-box;
+}
+
+.dmn-boxed-expression-container .dmn-boxed-expression-section {
+  border: 1px solid var(--element-properties-border-color);
+
+  & + .dmn-boxed-expression-section {
+    border-top: none;
+  }
+}
+
+.dmn-boxed-expression-container h2 {
+  margin: 0;
+  font-size: var(--font-size-big);
+}
+
+/* element properties */
+.dmn-boxed-expression-container .element-properties {
+  padding: var(--section-padding);
+  color: var(--element-properties-color);
+  position: relative;
+  min-width: 192px;
+}
+
+.dmn-boxed-expression-container .element-name {
+  margin: 0;
+  font-size: var(--font-size-bigger);
+  font-weight: normal;
+  white-space: pre;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.dmn-boxed-expression-container .textarea .content-editable {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.dmn-boxed-expression-container .element-name.editor:not(.focussed):hover {
+  cursor: text;
+}
+
+.dmn-boxed-expression-container .element-name.focussed .content-editable {
+  text-overflow: unset;
+}
+
+/* textarea */
+.dmn-boxed-expression-container .textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--padding);
+  font-family: var(--boxed-expression-font-family-monospace);
+  line-height: 1.4;
+  white-space: pre;
+  font-size: var(--font-size);
+  color: var(--textarea-color);
+  min-height: 250px;
+  overflow: auto;
+}
+
+.dmn-boxed-expression-container .textarea div:focus {
+  outline: none;
+}
+
+.dmn-boxed-expression-container .textarea.editor {
+  height: 100%;
+  cursor: text;
+}
+
+.dmn-boxed-expression-container .textarea:not(.editor) {
+  cursor: default;
+}
+
+/* view drd */
+.dmn-boxed-expression-container .view-drd {
+  margin-right: 10px;
+  padding-bottom: 10px;
+}
+
+.dmn-boxed-expression-container .view-drd .view-drd-button {
+  background: var(--view-drd-button-background-color);
+  padding: 8px;
+  border: solid 1px var(--view-drd-button-border-color);
+  border-radius: 2px;
+  font-size: 14px;
+  color: var(--view-drd-button-color);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dmn-boxed-expression-container .view-drd .view-drd-button:hover {
+  background: var(--view-drd-button-hover-background-color);
+}
+
+/* function definition */
+.dmn-boxed-expression-container .function-definition {
+  display: grid;
+  grid-template-columns: 50px auto;
+  grid-template-rows: 50px auto;
+
+  & .function-definition-kind, & .function-definition-parameters {
+    position: relative;
+  }
+}
+
+.dmn-boxed-expression-container .function-definition .function-definition-kind {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-size: var(--font-size-bigger);
+}
+
+.dmn-boxed-expression-container .function-definition .function-definition-parameters {
+  display: flex;
+  align-items: center;
+  padding-left: var(--padding);
+  border-left: 1px solid var(--element-properties-border-color);
+  font-size: var(--font-size-big);
+}
+
+.dmn-boxed-expression-container .function-definition .function-definition-body {
+  grid-column: span 2;
+  border-top: 1px solid var(--element-properties-border-color);
+}
+
+/* element-variable */
+
+.dmn-boxed-expression-container .element-variable {
+  padding: var(--section-padding);
+  display: inline-grid;
+  grid: auto / 1fr 1fr;
+  gap: 10px 20px;
+
+  & > h2 {
+    grid-column: span 2;
+  }
+
+  & .element-variable-name-label, & .element-variable-type-label {
+    display: block;
+    padding-bottom: 7px;
+    color: var(--color-grey-225-10-35)
+  }
+}

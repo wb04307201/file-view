@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cmmn</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body, #canvas {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="canvas"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/cmmn-js/0.20.0/cmmn-viewer.production.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/cmmn-js/dist/cmmn-viewer.production.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    function load() {
+        const id = getUrlParam('id');
+
+        const cmmnViewer = new CmmnJS({
+            container: '#canvas'
+        });
+
+        fetch(`/wopi/files/${id}/contents`)
+            .then(response => response.text())
+            .then(xmlContent => {
+                try {
+                    cmmnViewer.importXML(xmlContent)
+                } catch (err) {
+                    console.error('could not import CMMN 2.0 diagram', err);
+                    alert(err.message);
+                }
+            })
+            .catch(error => {
+                console.error('could not fetch file content', error);
+                alert(error.message);
+            });
+    }
+</script>
+</body>
+</html>

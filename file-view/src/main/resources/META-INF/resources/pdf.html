@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pdf</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body, #my-pdf {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pdfobject-container { height: 500px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+<div id="my-pdf"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/pdfobject/2.3.1/pdfobject.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/pdfobject/pdfobject.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    function load(){
+        const id = getUrlParam('id');
+
+        PDFObject.embed(`/wopi/files/${id}/contents`, "#my-pdf");
+    }
+</script>
+</body>
+</html>

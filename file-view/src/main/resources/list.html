@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监控面板</title>
+    <link rel="stylesheet" type="text/css" href="/static/list.css"/>
+    <script src="/static/list.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="control-panel">
+    <button id="refreshBtn" class="btn btn-primary">刷新数据</button>
+    <!-- 添加文件上传控件 -->
+    <div class="upload-section">
+        <input type="file" id="fileInput" class="file-input">
+        <button id="uploadBtn" class="btn btn-toggle">选择文件</button>
+        <button id="submitUploadBtn" class="btn btn-success" style="display:none;">上传文件</button>
+    </div>
+</div>
+
+
+    <div class="table-container">
+        <div class="table-header">
+            <h4>上传的文件</h4>
+        </div>
+        <div id="file-table">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>正在加载数据...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">这是一个Toast通知消息</div>
+</div>
+</body>
+</html>

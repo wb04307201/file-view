@@ -3,14 +3,43 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.wb04307201</groupId>
-    <artifactId>file-preview-spring-boot-starter</artifactId>
+    <groupId>com.gitee.wb04307201</groupId>
+    <artifactId>file-view-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+    <url>
+        https://gitee.com/wb04307201/file-preview
+    </url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>wubo</name>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>file-view-web</module>
+        <module>file-view</module>
+        <module>file-view-spring-boot-autoconfigure</module>
+        <module>file-view-spring-boot-starter</module>
+        <module>file-view-static</module>
+        <module>file-view-test</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>3.5.6</spring-boot.version>
+        <lombok.version>1.18.38</lombok.version>
+        <logback.version>1.5.18</logback.version>
+        <spire.version>5.4.0</spire.version>
     </properties>
 
     <dependencyManagement>
@@ -18,133 +47,51 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.3.4</version>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.34</version>
+                <version>${lombok.version}</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.5.8</version>
+                <version>${logback.version}</version>
             </dependency>
-
-            <!-- Spire.Office for Java -->
             <dependency>
                 <groupId>e-iceblue</groupId>
                 <artifactId>spire.office.free</artifactId>
-                <version>5.3.1</version>
+                <version>5.4.0</version>
             </dependency>
-
-            <!-- jodconverter -->
             <dependency>
                 <groupId>org.jodconverter</groupId>
                 <artifactId>jodconverter-local</artifactId>
-                <version>4.4.8</version>
+                <version>4.4.7</version>
             </dependency>
             <dependency>
                 <groupId>org.jodconverter</groupId>
                 <artifactId>jodconverter-local-lo</artifactId>
-                <version>4.4.8</version>
+                <version>4.4.7</version>
             </dependency>
             <dependency>
                 <groupId>org.jodconverter</groupId>
                 <artifactId>jodconverter-spring-boot-starter</artifactId>
-                <version>4.4.8</version>
+                <version>4.4.7</version>
             </dependency>
-
-            <!-- 解压缩 commons-compress-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.27.1</version>
+                <version>1.26.2</version>
             </dependency>
-
-            <!-- JWT -->
             <dependency>
                 <groupId>io.fusionauth</groupId>
                 <artifactId>fusionauth-jwt</artifactId>
-                <version>5.3.3</version>
-            </dependency>
-
-            <!-- https://mvnrepository.com/artifact/jakarta.transaction/jakarta.transaction-api -->
-            <dependency>
-                <groupId>jakarta.transaction</groupId>
-                <artifactId>jakarta.transaction-api</artifactId>
-                <version>2.0.1</version>
+                <version>5.3.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>e-iceblue</groupId>
-            <artifactId>spire.office.free</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jodconverter</groupId>
-            <artifactId>jodconverter-local-lo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jodconverter</groupId>
-            <artifactId>jodconverter-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.fusionauth</groupId>
-            <artifactId>fusionauth-jwt</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta.transaction</groupId>
-            <artifactId>jakarta.transaction-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <repositories>
-        <repository>
-            <id>com.e-iceblue</id>
-            <name>e-iceblue</name>
-            <url>https://repo.e-iceblue.cn/repository/maven-public/</url>
-        </repository>
-    </repositories>
 
 </project>

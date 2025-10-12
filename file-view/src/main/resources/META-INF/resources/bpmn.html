@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bpmn</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body, #canvas {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="canvas"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/bpmn-js/18.7.0/assets/bpmn-js.css',
+                cdn: 'https://cdn.jsdelivr.net/npm/bpmn-js/dist/assets/bpmn-js.css',
+                type: 'css'
+            },
+            {
+                url: '/static/bpmn-js/18.7.0/bpmn-viewer.production.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/bpmn-js/dist/bpmn-viewer.production.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    function load(){
+        const id = getUrlParam('id');
+
+        var bpmnViewer = new BpmnJS({
+            container: '#canvas'
+        });
+
+        fetch(`/wopi/files/${id}/contents`)
+            .then(response => response.text())
+            .then(xmlContent => {
+                try {
+                    bpmnViewer.importXML(xmlContent)
+                } catch (err) {
+                    console.error('could not import BPMN 2.0 diagram', err);
+                    alert(err.message);
+                }
+            })
+            .catch(error => {
+                console.error('could not fetch file content', error);
+                alert(error.message);
+            });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/static/common.js"></script>
+    <script type="text/javascript" src="http://localhost/web-apps/apps/api/documents/api.js"></script>
+    <title>onlyoffice</title>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="placeholder"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const id = getUrlParam('id');
+
+        fetch(`/wopi/files/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                const fileName = data.BaseFileName;
+                const fileType = data.BaseFileName.substring(data.BaseFileName.lastIndexOf('.') + 1);
+                let documentType;
+                if (fileType === 'docx' || fileType === 'doc') documentType = 'word';
+                if (fileType === 'xlsx' || fileType === 'xls') documentType = 'cell';
+                if (fileType === 'pptx' || fileType === 'ppt') documentType = 'slide';
+
+                const config = {
+                    "type": "desktop",
+                    "width": "100%",
+                    "height": "100%",
+                    "documentType": `${documentType}`,
+                    "document": {
+                        "fileType": `${fileType}`,
+                        "key": `${data.id}`,
+                        "title": `${fileName}`,
+                        "url": `http://192.168.31.197:8080/wopi/files/${data.id}/contents`,
+                    },
+                    "editorConfig": {
+                        "mode": "view",
+                        "lang": "zh"
+                    },
+                };
+
+                console.log('config',config)
+
+                const docEditor = new DocsAPI.DocEditor("placeholder", config);
+            });
+    });
+</script>
+</body>
+</html>

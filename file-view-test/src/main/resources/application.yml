@@ -1,0 +1,50 @@
+spring:
+    servlet:
+      multipart:
+        max-file-size: 100MB  # ?????????????100MB
+        max-request-size: 100MB  # ???????????100MB????????
+
+
+file:
+  view:
+    docx:
+      enable: false
+    excel:
+      enable: false
+    pptx:
+      enable: false
+    strategies:
+      - syntaxAndPattern: glob:*.bpmn
+        serviceName: bpmn
+      - syntaxAndPattern: glob:*.dmn
+        serviceName: dmn
+      - syntaxAndPattern: glob:*.cmmn
+        serviceName: cmmn
+      - syntaxAndPattern: glob:*.{sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,html,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
+        serviceName: code
+      - syntaxAndPattern: glob:*.epub
+        serviceName: epub
+      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,tiff,webp,svg,raw,heic,cr2,nef,orf,sr2}
+        serviceName: image
+      - syntaxAndPattern: glob:*.md
+        serviceName: markdown
+      - syntaxAndPattern: glob:*.pdf
+        serviceName: pdf
+      - syntaxAndPattern: glob:*.xmind
+        serviceName: xmind
+      - syntaxAndPattern: glob:*.ofd
+        serviceName: ofd
+#      - syntaxAndPattern: glob:*.docx
+#        serviceName: docx
+#      - syntaxAndPattern: glob:*.{xlsx,xls}
+#        serviceName: excel
+#      - syntaxAndPattern: glob:*.pptx
+#        serviceName: pptx
+      - syntaxAndPattern: glob:*.{3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl}
+        serviceName: o3d
+      - syntaxAndPattern: glob:*.zip
+        serviceName: zip
+      - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
+        serviceName: onlyoffice
+
+
