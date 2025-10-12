@@ -10,7 +10,8 @@
     <artifactId>file-view-web</artifactId>
     <packaging>jar</packaging>
 
-    <build>
+
+    <!--build>
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -52,5 +53,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build-->
 </project>
