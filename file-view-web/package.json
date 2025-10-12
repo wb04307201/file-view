@@ -1,0 +1,30 @@
+{
+  "name": "file-view-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vue-office/docx": "^1.6.3",
+    "@vue-office/excel": "^1.7.14",
+    "@vue-office/pptx": "^1.0.1",
+    "ofdview-vue3": "^1.0.31",
+    "online-3d-viewer": "^0.16.0",
+    "parser_x.js": "^1.1.76",
+    "vue": "^3.5.22",
+    "vue-demi": "^0.14.10",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7",
+    "vue-tsc": "^3.1.0"
+  }
+}

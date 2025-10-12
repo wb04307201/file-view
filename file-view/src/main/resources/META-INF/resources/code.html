@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<pre><code id="code"></code></pre>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/highlight/11.11.1/styles/default.min.css',
+                cdn: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css',
+                type: 'css'
+            },
+            {
+                url: '/static/highlight/11.11.1/highlight.min.js',
+                cdn: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    function load() {
+        const id = getUrlParam('id');
+
+        fetch(`/wopi/files/${id}/contents`)
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById("code").textContent = text;
+                hljs.highlightAll();
+            })
+            .catch(error => {
+                console.error('could not fetch file content', error);
+                alert(error.message);
+            });
+    }
+</script>
+</body>
+</html>

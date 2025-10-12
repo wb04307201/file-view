@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>epu</title>
+    <script src="/static/common.js"></script>
+</head>
+<body>
+<div id="viewer" style="height: 90vh; border: 1px solid #ccc;"></div>
+<select id="toc-select"></select>
+<button id="prev">上一页</button>
+<button id="next">下一页</button>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/jszip/3.10.1/jszip.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/jszip/dist/jszip.min.js',
+                type: 'js'
+            },
+            {
+                url: '/static/epubjs/0.3.93/epub.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    function load() {
+        const id = getUrlParam('id');
+        const book = ePub(`${window.location.origin}/wopi/files/${id}/contents`, {openAs: "epub"})
+        const rendition = book.renderTo("viewer", {width: "100%", height: "100%"});
+        rendition.display();
+
+        // 翻页按钮
+        book.ready.then(function () {
+            document.getElementById("prev").addEventListener("click", () => rendition.prev());
+            document.getElementById("next").addEventListener("click", () => rendition.next());
+        });
+
+        // 绑定目录
+        book.loaded.navigation
+            .then(toc => {
+                const select = document.getElementById("toc-select");
+                toc.forEach(chapter => select.add(new Option(chapter.label, chapter.href)))
+                select.onchange = () => rendition.display(select.value)
+            })
+    }
+</script>
+</body>
+</html>

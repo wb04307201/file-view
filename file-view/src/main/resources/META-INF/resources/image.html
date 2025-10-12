@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>image</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<img id="image" style="display: none">
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/viewerjs/1.11.7/viewer.min.css',
+                cdn: 'https://cdn.jsdelivr.net/npm/viewerjs/dist/viewer.min.css',
+                type: 'css'
+            },
+            {
+                url: '/static/viewerjs/1.11.7/viewer.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/viewerjs/dist/viewer.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    function load() {
+        const image = document.getElementById('image')
+        const id = getUrlParam('id');
+
+        fetch(`/wopi/files/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                image.alt = data.BaseFileName;
+                image.src = `/wopi/files/${id}/contents`;
+                image.onload = function () {
+                    const viewer = new Viewer(image, {
+                        inline: true, // 模态框模式（全屏查看）
+                        toolbar: {
+                            zoomIn: 4,
+                            zoomOut: 4,
+                            oneToOne: 4,
+                            reset: 4,
+                            rotateLeft: 4,
+                            rotateRight: 4,
+                            flipHorizontal: 4,
+                            flipVertical: 4,
+                        },
+                        title: true,        // 显示图片标题（基于 alt 属性）
+                        movable: true,       // 允许图片拖动
+                        zoomable: true,      // 允许缩放
+                        rotatable: true,     // 允许旋转
+                        scalable: true,      // 允许翻转
+                        transition: true,    // 启用过渡动画
+                        keyboard: true,       // 启用键盘快捷键（如 Esc 退出）
+                    });
+                };
+            })
+    }
+</script>
+</body>
+</html>

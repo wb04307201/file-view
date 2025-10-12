@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ChatGPT demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        html, body, .container {
+            height: 100%;
+        }
+
+        .header {
+            background: #ededed;
+        }
+
+        .header_main {
+            height: 50px;
+            line-height: 50px;
+            font-size: 30px;
+        }
+
+        .header_info {
+            background: #ededed;
+            font-size: 10px;
+            text-align: right;
+            margin-top: 30px;
+        }
+
+        .chat_box_row {
+            height: calc(100% - 50px - 82px);
+            overflow-y: auto;
+        }
+
+        .chat_box {
+            background: #e5ddd5;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .chat_input {
+            background: #ededed;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .message {
+            border-radius: 10px;
+            padding: 5px 10px 5px 10px;
+            margin-top: 10px;
+            max-width: 75%;
+        }
+
+        .message_me {
+            float: right;
+            background: #86ef64;
+        }
+
+        .message_chatGPT {
+            float: left;
+            background: white;
+        }
+
+        .submit_button {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row header">
+        <div class="col header_main">
+            <a class="link-primary" data-bs-toggle="modal" data-bs-target="#roleModal">ChatGPT</a>
+        </div>
+        <div class="col header_info">
+            调用ChaGPT API，<a href="https://gitee.com/wb04307201/chat-gpt-demo" target="_blank">喜欢请给个stars</a>
+        </div>
+    </div>
+    <div class="row chat_box_row" id="chat_box_row">
+        <div class="col chat_box" id="chat_box">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col chat_input">
+            <div class="input-group">
+                <span class="input-group-text">说：</span>
+                <textarea class="form-control" aria-label="With textarea" name="prompt" id="prompt"></textarea>
+                <button class="btn btn-outline-secondary submit_button" type="button" id="submit" onclick="chatGPT()">
+                    发送
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">扮演角色</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-text">指令</span>
+                    <textarea class="form-control" aria-label="指令" name="roleCommand" id="roleCommand"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="setRole()">Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src=" https://cdn.jsdelivr.net/npm/marked@4.2.12/lib/marked.umd.min.js "></script>
+<script type="text/javascript">
+    var chat_box = document.getElementById("chat_box")
+    var prompt = document.getElementById("prompt")
+    prompt.select()
+    var submit = document.getElementById("submit")
+    var chat_box_row = document.getElementById("chat_box_row")
+    var roleCommand = document.getElementById("roleCommand")
+    roleCommand.select()
+
+    document.onkeydown = function (event_e) {
+        if (window.event) {
+            event_e = window.event;
+        }
+        var int_keycode = event_e.charCode || event_e.keyCode;
+        if (int_keycode == '13') { //回车键：13
+            chatGPT();//调用自己的函数
+        }
+    }
+
+    messages=[]
+    // messages.push({'role': 'system', 'content': "我希望你扮演一个小说家。您将提出富有创意和引人入胜的故事"})
+    // messages.push({'role': 'system', 'content': "我想让你扮演一个基于文本的冒险游戏。我在这个基于文本的冒险游戏中扮演一个角色。请尽可能具体地描述角色所看到的内容和环境，并在游戏输出的唯一代码块中回复，而不是其他任何区域。我将输入命令来告诉角色该做什么，而你需要回复角色的行动结果以推动游戏的进行。我的第一个命令是'醒来'，请从这里开始故事"})
+
+    function chatGPT() {
+        if (prompt.value != "" && prompt.value != null && prompt.value.replace(/[\r\n]/g, "") != "") {
+            prompt.readOnly = true
+            prompt.style.backgroundColor = "#aaa"
+            submit.disabled = true
+            submit.innerHTML = "<span class=\"spinner-grow spinner-grow-sm\" role=\"status\" aria-hidden=\"true\"></span><span class=\"visually-hidden\">Loading...</span>"
+
+            messages.push({'role': 'user', 'content': prompt.value})
+
+            axios({
+                method: 'post',
+                url: 'https://api.openai.com/v1/chat/completions',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 换成自己的api_key
+                    'Authorization': 'Bearer api_key',
+                },
+                data: {
+                    model: "gpt-3.5-turbo",
+                    messages: messages
+                }
+            }).then(response => {
+                messages.push(response.data.choices[0].message)
+
+                chat_box.innerHTML = chat_box.innerHTML + "<div class=\"row\">\n" +
+                    "<div class=\"col\">\n" +
+                    "<div class=\"message message_me\">\n" +
+                    prompt.value + "\n" +
+                    "</div>\n" +
+                    "</div>\n" +
+                    "</div>" + " <div class=\"row\">\n" +
+                    "<div class=\"col\">\n" +
+                    "<div class=\"message message_chatGPT\">\n" +
+                    marked.parse(response.data.choices[0].message['content']) + "\n" +
+                    "</div>\n" +
+                    "</div>\n" +
+                    "</div>"
+
+                prompt.readOnly = false
+                prompt.style.backgroundColor = "white"
+                prompt.value = ""
+                prompt.select()
+                submit.disabled = false
+                submit.innerHTML = "发送"
+                chat_box_row.scrollTop = chat_box_row.scrollHeight
+            }).catch(error => {
+                messages.pop()
+
+                chat_box.innerHTML = chat_box.innerHTML + "<div class=\"row\">\n" +
+                    "<div class=\"col\">\n" +
+                    "<div class=\"message message_me\">\n" +
+                    prompt.value + "\n" +
+                    "</div>\n" +
+                    "</div>\n" +
+                    "</div>" + " <div class=\"row\">\n" +
+                    "<div class=\"col\">\n" +
+                    "<div class=\"message message_chatGPT\">\n" +
+                    error + "\n" +
+                    "</div>\n" +
+                    "</div>\n" +
+                    "</div>"
+
+                prompt.readOnly = false
+                prompt.style.backgroundColor = "white"
+                prompt.select()
+                submit.disabled = false
+                submit.innerHTML = "发送"
+                chat_box_row.scrollTop = chat_box_row.scrollHeight
+            });
+        }
+        //无输入
+        else {
+            chat_box.innerHTML = chat_box.innerHTML + " <div class=\"row\">\n" +
+                "<div class=\"col\">\n" +
+                "<div class=\"message message_chatGPT\">\n" +
+                "你想和我说什么？\n" +
+                "</div>\n" +
+                "</div>\n" +
+                "</div>"
+            prompt.value = ""
+            prompt.select()
+            chat_box_row.scrollTop = chat_box_row.scrollHeight
+        }
+    }
+
+    function setRole() {
+        this.clear();
+        if (roleCommand.value != "" && roleCommand.value != null && roleCommand.value.replace(/[\r\n]/g, "") != "") {
+            this.messages.push({'role': 'system', 'content': roleCommand.value})
+        }
+    }
+
+    function clear() {
+        this.messages = []
+        chat_box.innerHTML = ""
+    }
+</script>
+</body>
+</html>

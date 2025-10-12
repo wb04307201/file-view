@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xmind</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body, #xmind-container {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="xmind-container"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/xmind-embed-viewer/1.2.0/umd/xmind-embed-viewer.js',
+                cdn: 'https://www.jsdelivr.com/npm/xmind-embed-viewer/dist/umd/xmind-embed-viewer.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('资源加载失败:', error);
+            });
+    });
+
+    function load(){
+        const id = getUrlParam('id');
+
+        const viewer = new XMindEmbedViewer({
+            el: '#xmind-container', // HTMLElement | HTMLIFrameElement | string
+            // 如果在中国大陆境内速度慢，可以添加的参数 `region: 'cn'` 改为使用 xmind.cn 的图库作为依赖。
+             region: 'cn', //optinal, global(default) or cn
+            styles: {height: "100%", width: "100%"},
+        });
+        fetch(`/wopi/files/${id}/contents`)
+            .then(res => res.arrayBuffer())
+            .then(file => viewer.load(file))
+    }
+</script>
+</body>
+</html>

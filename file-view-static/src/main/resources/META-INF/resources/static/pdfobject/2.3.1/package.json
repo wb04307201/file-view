@@ -1,0 +1,27 @@
+{
+  "name": "pdfobject",
+  "version": "2.3.1",
+  "description": "A lightweight JavaScript utility for dynamically embedding PDFs in HTML documents",
+  "main": "pdfobject.js",
+  "scripts": {
+    "build": "uglifyjs pdfobject.js -o pdfobject.min.js --compress --comments",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://pipwerks@github.com/pipwerks/PDFObject.git"
+  },
+  "keywords": [
+    "pdf",
+    "pdfobject"
+  ],
+  "author": "Philip Hutchison <philip@pipwerks.com> (http://pipwerks.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pipwerks/PDFObject/issues"
+  },
+  "homepage": "https://github.com/pipwerks/PDFObject#readme",
+  "devDependencies": {
+    "uglify-es": "^3.3.9"
+  }
+}
