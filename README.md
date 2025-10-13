@@ -438,7 +438,7 @@ public class MinioFileStorageImpl implements IFileStorage {
 | 3D模型文件       | [Online3DViewer](https://github.com/kovacsv/Online3DViewer)          |
 | 思维导图文件       | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) |
 | 压缩文件         | [jszip](https://github.com/Stuk/jszip)                               |
-| CAD    | [CAD](https://github.com/mlightcad/cad-viewer)                                 |
+| CAD    | [CAD-Viewer](https://github.com/mlightcad/cad-viewer)                                 |
 
 ## [文件预览测试用文件](https://gitee.com/wb04307201/file-view-test-file)
 
