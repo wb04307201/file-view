@@ -44,6 +44,8 @@ file:
         serviceName: o3d
       - syntaxAndPattern: glob:*.zip
         serviceName: zip
+      - syntaxAndPattern: glob:*.{dwg,dxf}
+        serviceName: cad
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 

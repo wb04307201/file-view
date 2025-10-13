@@ -132,6 +132,12 @@ public class FileViewConfiguration {
     }
 
     @Bean
+    @ConditionalOnExpression("${file.view.cad.enable:true}")
+    public IView cadView(){
+        return new CadView();
+    }
+
+    @Bean
     public ViewFactory viewFactory(List<IView> viewServices, FileViewProperties properties, IFileStorage fileStorage) {
         return new ViewFactory(viewServices, properties.getStrategies(), fileStorage);
     }

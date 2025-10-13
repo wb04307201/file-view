@@ -13,8 +13,6 @@ onMounted(() => {
     })
   }
 });
-
-
 </script>
 
 <template>

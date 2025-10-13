@@ -9,9 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mlightcad/cad-simple-viewer": "^1.1.11",
+    "@mlightcad/data-model": "^1.2.24",
     "@vue-office/docx": "^1.6.3",
     "@vue-office/excel": "^1.7.14",
     "@vue-office/pptx": "^1.0.1",
+    "lodash-es": "^4.17.21",
     "ofdview-vue3": "^1.0.31",
     "online-3d-viewer": "^0.16.0",
     "parser_x.js": "^1.1.76",
@@ -20,11 +23,15 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@mlightcad/common": "^1.2.2",
+    "@mlightcad/geometry-engine": "^3.0.3",
+    "@mlightcad/graphic-interface": "^3.0.4",
     "@types/node": "^24.6.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
+    "vite-plugin-static-copy": "^3.1.1",
     "vue-tsc": "^3.1.0"
   }
 }
