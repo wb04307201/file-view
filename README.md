@@ -23,6 +23,7 @@
 - 3D模型文件(3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl)
 - 思维导图文件(xmind)
 - 压缩文件(zip)
+- CAD(dwg,dxf)
 
 ## 引入
 
@@ -41,7 +42,7 @@
 <dependency>
     <groupId>com.gitee.wb04307201.file-view</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
 </dependency>
 ```
 
@@ -80,6 +81,8 @@ file:
         enable: true
     zip:
         enable: true
+    cod:
+        enable: true
     ## 以下为默认的文件名和处理器匹配规则,默认无需配置
     strategies:
       - syntaxAndPattern: glob:*.bpmn
@@ -112,6 +115,8 @@ file:
         serviceName: o3d
       - syntaxAndPattern: glob:*.zip
         serviceName: zip
+      - syntaxAndPattern: glob:*.{dwg,dxf}
+        serviceName: cad
 ```
 
 syntaxAndPattern通过指定语法（如 glob 或 regex）对文件名进行匹配
@@ -271,6 +276,8 @@ file:
         serviceName: o3d
       - syntaxAndPattern: glob:*.zip
         serviceName: zip
+      - syntaxAndPattern: glob:*.{dwg,dxf}
+        serviceName: cad
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
@@ -431,10 +438,9 @@ public class MinioFileStorageImpl implements IFileStorage {
 | 3D模型文件       | [Online3DViewer](https://github.com/kovacsv/Online3DViewer)          |
 | 思维导图文件       | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) |
 | 压缩文件         | [jszip](https://github.com/Stuk/jszip)                               |
+| CAD    | [CAD](https://github.com/mlightcad/cad-viewer)                                 |
 
-
-
-
+## [文件预览测试用文件](https://gitee.com/wb04307201/file-view-test-file)
 
 
 

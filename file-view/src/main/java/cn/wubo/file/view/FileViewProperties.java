@@ -27,6 +27,7 @@ public class FileViewProperties {
     private ServiceProperties pptx;
     private ServiceProperties o3d;
     private ServiceProperties zip;
+    private ServiceProperties cad;
     private List<StrategyProperties> strategies = new ArrayList<>();
 
     public FileViewProperties() {
@@ -45,6 +46,7 @@ public class FileViewProperties {
         this.pptx = new ServiceProperties(true);
         this.o3d = new ServiceProperties(true);
         this.zip = new ServiceProperties(true);
+        this.cad = new ServiceProperties(true);
         this.strategies.add(new StrategyProperties("glob:*.bpmn", "bpmn"));
         this.strategies.add(new StrategyProperties("glob:*.dmn", "dmn"));
         this.strategies.add(new StrategyProperties("glob:*.cmmn", "cmmn"));
@@ -60,6 +62,7 @@ public class FileViewProperties {
         this.strategies.add(new StrategyProperties("glob:*.pptx", "pptx"));
         this.strategies.add(new StrategyProperties("glob:*.{3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl}", "o3d"));
         this.strategies.add(new StrategyProperties("glob:*.zip", "zip"));
+        this.strategies.add(new StrategyProperties("glob:*.{dwg,dxf}","cad"));
     }
 
     @Data
