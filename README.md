@@ -17,7 +17,7 @@
 - 图片文件
 - 视频文件
 - 音频文件
-- 文档文件(pdf,ofd，epub)
+- 文档文件(pdf,ofd,epub)
 - 文本文件/代码文件(sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
 - Markdown文档文件
 - 3D模型文件(3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl)
@@ -119,36 +119,37 @@ file:
         serviceName: cad
 ```
 
-syntaxAndPattern通过指定语法（如 glob 或 regex）对文件名进行匹配
-- glob：*.txt
-- regex:(.*)\.txt
+`syntaxAndPattern`通过指定语法（如 glob 或 regex）对文件名进行匹配：
+- glob：`*.txt`
+- regex：`(.*)\.txt`
 
 ## 使用
 
 ### 静态资源库
 部分文件类型使用内置渲染器，如：pdf、epub、xmind、zip、image、code、markdown、cmmn、dmn、bpmn等
-使用的js库资源从jsDelivr加载，如无法从jsDelivr获取资源，可以添加file-view-static将js库本地化
+使用的js库资源从jsDelivr加载，如无法从jsDelivr获取资源，可以添加`file-view-static`将js库本地化
 ```xml
-        <dependency>
-            <groupId>com.gitee.wb04307201.file-view</groupId>
-            <artifactId>file-view-static</artifactId>
-            <version>1.3.0</version>
-        </dependency>
+<dependency>
+    <groupId>com.gitee.wb04307201.file-view</groupId>
+    <artifactId>file-view-static</artifactId>
+    <version>1.3.0</version>
+</dependency>
 ```
 
 ### 访问内置界面进行文件上传和预览
-访问 `http://localhost:8080/file/view`
-![img.png](img.png)
+访问 `http://localhost:8080/file/view`  
+![img.png](img.png)  
 ![gif.gif](gif.gif)
 
 ### 预览扩展
-下面以OnlyOffice为例说明如何扩展预览
-1. 使用docker安装OnlyOffice文档开发者版，[更详细内容请查看](https://api.onlyoffice.com/docs/docs-api/get-started/basic-concepts/)
+下面以OnlyOffice为例说明如何扩展预览：
+1. 使用docker安装[OnlyOffice文档开发者版](https://api.onlyoffice.com/docs/docs-api/get-started/basic-concepts/)
 ```bash
 docker run --name onlyoffice -i -t -d -p 80:80 -e JWT_ENABLED=false -e ALLOW_PRIVATE_IP_ADDRESS=true onlyoffice/documentserver-de
 ```
-2. 文件预览渲染器扩展
-编写[IView.java](file-view/src/main/java/cn/wubo/file/view/preview/IView.java)接口的实现[OnlyOfficeView.java](file-view-test/src/main/java/cn/wubo/file/view/test/OnlyOfficeView.java)
+
+2. 文件预览渲染器扩展  
+编写`IView.java`接口的实现`OnlyOfficeView.java`：
 ```java
 package cn.wubo.file.view.test;
 
@@ -172,9 +173,9 @@ public class OnlyOfficeView implements IView {
         return ServerResponse.temporaryRedirect(URI.create(String.format("/onlyoffice.html?id=%s",id))).build();
     }
 }
-
 ```
-编写页面[onlyoffice.html](file-view-test/src/main/resources/META-INF/resources/onlyoffice.html)
+
+编写页面`onlyoffice.html`：
 ```html
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
@@ -235,7 +236,7 @@ public class OnlyOfficeView implements IView {
 </html>
 ```
 
-3. 修改配置，关闭重复的渲染器，重定义文件匹配规则[application.yml](file-view-test/src/main/resources/application.yml)
+3. 修改配置，关闭重复的渲染器，重定义文件匹配规则`application.yml`：
 ```yaml
 file:
   view:
@@ -246,62 +247,30 @@ file:
     pptx:
         enable: false
     strategies:
-      - syntaxAndPattern: glob:*.bpmn
-        serviceName: bpmn
-      - syntaxAndPattern: glob:*.dmn
-        serviceName: dmn
-      - syntaxAndPattern: glob:*.cmmn
-        serviceName: cmmn
-      - syntaxAndPattern: glob:*.{sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,html,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
-        serviceName: code
-      - syntaxAndPattern: glob:*.epub
-        serviceName: epub
-      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,tiff,webp,svg,raw,heic,cr2,nef,orf,sr2}
-        serviceName: image
-      - syntaxAndPattern: glob:*.md
-        serviceName: markdown
-      - syntaxAndPattern: glob:*.pdf
-        serviceName: pdf
-      - syntaxAndPattern: glob:*.xmind
-        serviceName: xmind
-      - syntaxAndPattern: glob:*.ofd
-        serviceName: ofd
-#      - syntaxAndPattern: glob:*.docx
-#        serviceName: docx
-#      - syntaxAndPattern: glob:*.{xlsx,xls}
-#        serviceName: excel
-#      - syntaxAndPattern: glob:*.pptx
-#        serviceName: pptx
-      - syntaxAndPattern: glob:*.{3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl}
-        serviceName: o3d
-      - syntaxAndPattern: glob:*.zip
-        serviceName: zip
-      - syntaxAndPattern: glob:*.{dwg,dxf}
-        serviceName: cad
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
 
-3. 预览效果如下
+预览效果如下：  
 ![gif_1.gif](gif_1.gif)
 
 ### 文件存储扩展
-下面以MinIO为例说明如何扩展文件存储
-1. 使用docker安装MinIO
+下面以MinIO为例说明如何扩展文件存储：
+1. 使用docker安装MinIO：
 ```bash
 docker run -p 9000:9000 -p 9001:9001 --name minio -e "MINIO_ROOT_USER=ROOTUSER" -e "MINIO_ROOT_PASSWORD=CHANGEME123" quay.io/minio/minio server /data --console-address ":9001"
 ```
-2. 添加MinIO依赖
+
+2. 添加MinIO依赖：
 ```xml
-        <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-            <version>8.6.0</version>
-        </dependency>
+<dependency>
+    <groupId>io.minio</groupId>
+    <artifactId>minio</artifactId>
+    <version>8.6.0</version>
+</dependency>
 ```
 
-2. 实现自定义存储
-3. 编写接口[IFileStorage.java](file-view/src/main/java/cn/wubo/file/view/storage/IFileStorage.java)的实现[MinioFileStorageImpl.java](file-view-test/src/main/java/cn/wubo/file/view/test/MinioFileStorageImpl.java)
+3. 编写接口`IFileStorage.java`的实现`MinioFileStorageImpl.java`：
 ```java
 package cn.wubo.file.view.test;
 
@@ -313,7 +282,6 @@ import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
-import io.minio.errors.*;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -362,9 +330,7 @@ public class MinioFileStorageImpl implements IFileStorage {
             FileStorageInfo fpi = new FileStorageInfo(id, fileName, content.length, mimeType, filePath.toString(), version);
             fileStorageInfos.add(fpi);
             return fpi;
-        } catch (NoSuchAlgorithmException | IOException | ServerException | InsufficientDataException |
-                 InvalidKeyException | ErrorResponseException | InvalidResponseException | XmlParserException |
-                 InternalException e) {
+        } catch (NoSuchAlgorithmException | IOException | InvalidKeyException | InvalidResponseException | InsufficientDataException | InternalException | ErrorResponseException | XmlParserException | ServerException e) {
             throw new LocalFileStorageException(e.getMessage(), e);
         }
     }
@@ -374,8 +340,7 @@ public class MinioFileStorageImpl implements IFileStorage {
         return fileStorageInfos.stream()
                 .filter(fpi -> fpi.getId().equals(id))
                 .findAny()
-                .orElseThrow(() -> new LocalFileStorageException("File info not found for id: " + id)
-                );
+                .orElseThrow(() -> new LocalFileStorageException("File info not found for id: " + id));
     }
 
     @Override
@@ -393,9 +358,8 @@ public class MinioFileStorageImpl implements IFileStorage {
                             .build()
             );
             return is.readAllBytes();
-        } catch (IOException | ErrorResponseException | InsufficientDataException | InternalException |
-                 InvalidKeyException | InvalidResponseException | NoSuchAlgorithmException | ServerException |
-                 XmlParserException e) {
+        } catch (IOException | InvalidKeyException | InvalidResponseException | NoSuchAlgorithmException |
+                 InsufficientDataException | InternalException | ErrorResponseException | XmlParserException | ServerException e) {
             throw new LocalFileStorageException(e.getMessage(), e);
         }
     }
@@ -412,9 +376,8 @@ public class MinioFileStorageImpl implements IFileStorage {
                                 .build()
                 );
                 fileStorageInfos.remove(fsi);
-            } catch (IOException | ErrorResponseException | InsufficientDataException | InternalException |
-                     InvalidKeyException | InvalidResponseException | NoSuchAlgorithmException | ServerException |
-                     XmlParserException e) {
+            } catch (IOException | InvalidKeyException | InvalidResponseException | NoSuchAlgorithmException |
+                     InsufficientDataException | InternalException | ErrorResponseException | XmlParserException | ServerException e) {
                 throw new LocalFileStorageException(e.getMessage(), e);
             }
         }
@@ -426,25 +389,18 @@ public class MinioFileStorageImpl implements IFileStorage {
 ## 使用的第三方库
 
 | 文件类型         | 第三方库                                                                 |
-|--------------|----------------------------------------------------------------------|
-| office文件     | [vue-office](https://github.com/501351981/vue-office)                |
-| 业务流程管理文件     | [bpmn-io](https://github.com/bpmn-io)                                |
-| 图片文件         | [viewerjs](https://github.com/fengyuanchen/viewerjs)                 |
-| 文档文件(pdf)    | [pdfobject](https://github.com/pipwerks/PDFObject)                   |
+|------------------|--------------------------------------------------------------------------|
+| office文件       | [vue-office](https://github.com/501351981/vue-office)                |
+| 业务流程管理文件   | [bpmn-io](https://github.com/bpmn-io)                                |
+| 图片文件         | [viewerjs](https://github.com/fengyuanchen/viewerjs)                   |
+| 文档文件(pdf)    | [pdfobject](https://github.com/pipwerks/PDFObject)                     |
 | 文档文件(ofd)    | [ofd.js](https://github.com/DLTech21/ofd.js)                         |
-| 文档文件(epub)   | [epub.js](https://github.com/futurepress/epub.js/)                   |
-| 文本文件/代码文件    | [highlight.js](https://github.com/highlightjs/highlight.js)          |
+| 文档文件(epub)   | [epub.js](https://github.com/futurepress/epub.js)                     |
+| 文本文件/代码文件 | [highlight.js](https://github.com/highlightjs/highlight.js)             |
 | Markdown文档文件 | [vditor](https://github.com/Vanessa219/vditor)                       |
-| 3D模型文件       | [Online3DViewer](https://github.com/kovacsv/Online3DViewer)          |
-| 思维导图文件       | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) |
-| 压缩文件         | [jszip](https://github.com/Stuk/jszip)                               |
-| CAD    | [CAD-Viewer](https://github.com/mlightcad/cad-viewer)                                 |
+| 3D模型文件      | [Online3DViewer](https://github.com/kovacsv/Online3DViewer)           |
+| 思维导图文件     | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer)  |
+| 压缩文件        | [jszip](https://github.com/Stuk/jszip)                               |
+| CAD              | [CAD-Viewer](https://github.com/mlightcad/cad-viewer)                  |
 
 ## [文件预览测试用文件](https://gitee.com/wb04307201/file-view-test-file)
-
-
-
-
-
-
-
