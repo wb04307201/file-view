@@ -1,7 +1,7 @@
 # File View 文件预览
 
 <div align="right">
-  <a href="README.en.md">English</a> | 中文
+  <a href="README.md">English</a> | 中文
 </div>
 
 > 一个轻量级文件预览的starter组件，支持多种文档和媒体格式的在线预览，采用模块化架构，易于扩展和定制。
