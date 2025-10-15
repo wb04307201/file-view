@@ -132,7 +132,7 @@ file:
 <dependency>
     <groupId>com.gitee.wb04307201.file-view</groupId>
     <artifactId>file-view-static</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
 </dependency>
 ```
 
