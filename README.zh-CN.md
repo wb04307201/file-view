@@ -1,5 +1,9 @@
 # File View 文件预览
 
+<div align="right">
+  <a href="README.en.md">English</a> | 中文
+</div>
+
 > 一个轻量级文件预览的starter组件，支持多种文档和媒体格式的在线预览，采用模块化架构，易于扩展和定制。
 
 [![](https://jitpack.io/v/com.gitee.wb04307201/file-view.svg)](https://jitpack.io/#com.gitee.wb04307201/file-view)
@@ -402,5 +406,3 @@ public class MinioFileStorageImpl implements IFileStorage {
 | 思维导图文件     | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer)  |
 | 压缩文件        | [jszip](https://github.com/Stuk/jszip)                               |
 | CAD              | [CAD-Viewer](https://github.com/mlightcad/cad-viewer)                  |
-
-## [文件预览测试用文件](https://gitee.com/wb04307201/file-view-test-file)
