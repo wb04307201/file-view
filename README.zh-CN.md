@@ -21,7 +21,7 @@
 - 图片文件
 - 视频文件
 - 音频文件
-- 文档文件(pdf,ofd,epub)
+- 文档文件(pdf,epub)
 - 文本文件/代码文件(sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
 - Markdown文档文件
 - 3D模型文件(3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl)
@@ -73,8 +73,6 @@ file:
         enable: true
     xmind:
         enable: true
-    ofd:
-        enable: true
     docx:
         enable: true
     excel:
@@ -107,8 +105,6 @@ file:
         serviceName: pdf
       - syntaxAndPattern: glob:*.xmind
         serviceName: xmind
-      - syntaxAndPattern: glob:*.ofd
-        serviceName: ofd
       - syntaxAndPattern: glob:*.docx
         serviceName: docx
       - syntaxAndPattern: glob:*.{xlsx,xls}
@@ -398,7 +394,6 @@ public class MinioFileStorageImpl implements IFileStorage {
 | 业务流程管理文件   | [bpmn-io](https://github.com/bpmn-io)                                |
 | 图片文件         | [viewerjs](https://github.com/fengyuanchen/viewerjs)                   |
 | 文档文件(pdf)    | [pdfobject](https://github.com/pipwerks/PDFObject)                     |
-| 文档文件(ofd)    | [ofd.js](https://github.com/DLTech21/ofd.js)                         |
 | 文档文件(epub)   | [epub.js](https://github.com/futurepress/epub.js)                     |
 | 文本文件/代码文件 | [highlight.js](https://github.com/highlightjs/highlight.js)             |
 | Markdown文档文件 | [vditor](https://github.com/Vanessa219/vditor)                       |

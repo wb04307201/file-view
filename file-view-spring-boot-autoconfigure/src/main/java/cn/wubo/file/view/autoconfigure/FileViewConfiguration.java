@@ -96,12 +96,6 @@ public class FileViewConfiguration {
     }
 
     @Bean
-    @ConditionalOnExpression("${file.view.ofd.enable:true}")
-    public IView ofdView(){
-        return new OfdView();
-    }
-
-    @Bean
     @ConditionalOnExpression("${file.view.docx.enable:true}")
     public IView docxView(){
         return new DocxView();

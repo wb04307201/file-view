@@ -40,7 +40,6 @@ public class FileViewProperties {
         this.markdown = new ServiceProperties(true);
         this.pdf = new ServiceProperties(true);
         this.xmind = new ServiceProperties(true);
-        this.ofd = new ServiceProperties(true);
         this.docx = new ServiceProperties(true);
         this.excel = new ServiceProperties(true);
         this.pptx = new ServiceProperties(true);
@@ -56,7 +55,6 @@ public class FileViewProperties {
         this.strategies.add(new StrategyProperties("glob:*.md", "markdown"));
         this.strategies.add(new StrategyProperties("glob:*.pdf", "pdf"));
         this.strategies.add(new StrategyProperties("glob:*.xmind", "xmind"));
-        this.strategies.add(new StrategyProperties("glob:*.ofd", "ofd"));
         this.strategies.add(new StrategyProperties("glob:*.docx", "docx"));
         this.strategies.add(new StrategyProperties("glob:*.{xlsx,xls}", "excel"));
         this.strategies.add(new StrategyProperties("glob:*.pptx", "pptx"));

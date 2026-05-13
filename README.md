@@ -21,7 +21,7 @@
 - Image files
 - Video files
 - Audio files
-- Document files (pdf, ofd, epub)
+- Document files (pdf, epub)
 - Text/Code files (sh, c, cpp, cs, css, diff, go, graphql, ini, java, js, json, kt, less, lua, mk, m, pl, php, phtml, txt, py, pyrepl, r, rb, rs, scss, sh, sql, swift, ts, vb, wasm, xml, yaml, yml)
 - Markdown documents
 - 3D model files (3dm, 3ds, 3mf, amf, bim, brep, dae, fbx, fcstd, gltf, ifc, iges, step, stl, obj, off, ply, wrl)
@@ -73,8 +73,6 @@ file:
         enable: true
     xmind:
         enable: true
-    ofd:
-        enable: true
     docx:
         enable: true
     excel:
@@ -107,8 +105,6 @@ file:
         serviceName: pdf
       - syntaxAndPattern: glob:*.xmind
         serviceName: xmind
-      - syntaxAndPattern: glob:*.ofd
-        serviceName: ofd
       - syntaxAndPattern: glob:*.docx
         serviceName: docx
       - syntaxAndPattern: glob:*.{xlsx,xls}
@@ -398,7 +394,6 @@ public class MinioFileStorageImpl implements IFileStorage {
 | Business Process Management files | [bpmn-io](https://github.com/bpmn-io) |
 | Image files | [viewerjs](https://github.com/fengyuanchen/viewerjs) |
 | Document files (pdf) | [pdfobject](https://github.com/pipwerks/PDFObject) |
-| Document files (ofd) | [ofd.js](https://github.com/DLTech21/ofd.js) |
 | Document files (epub) | [epub.js](https://github.com/futurepress/epub.js) |
 | Text/Code files | [highlight.js](https://github.com/highlightjs/highlight.js) |
 | Markdown documents | [vditor](https://github.com/Vanessa219/vditor) |
