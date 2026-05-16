@@ -254,13 +254,19 @@ Create page `onlyoffice.html`:
 file:
   view:
     docx:
-        enable: false
+      enable: false
     excel:
-        enable: false
+      enable: false
     pptx:
-        enable: false
+      enable: false
     strategies:
       - ...
+#      - syntaxAndPattern: glob:*.docx
+#        serviceName: docx
+#      - syntaxAndPattern: glob:*.xlsx
+#        serviceName: excel
+#      - syntaxAndPattern: glob:*.pptx
+#        serviceName: pptx
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
