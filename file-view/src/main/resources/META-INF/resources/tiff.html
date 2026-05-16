@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIFF Preview</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+        }
+        #toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: #1a1a1a;
+            width: 100%;
+            box-sizing: border-box;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        #toolbar button {
+            background: #444;
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #toolbar button:disabled {
+            background: #2a2a2a;
+            color: #666;
+            cursor: not-allowed;
+        }
+        #toolbar button:not(:disabled):hover {
+            background: #555;
+        }
+        #page-info {
+            color: #ccc;
+            font-size: 14px;
+            min-width: 80px;
+            text-align: center;
+        }
+        #tiff-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            padding: 8px;
+        }
+        #tiff-canvas {
+            max-width: 95%;
+            max-height: calc(100vh - 44px);
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .empty {
+            color: #999;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="toolbar" style="display: none;">
+    <button id="prev-btn" disabled>&#9664; 上一页</button>
+    <span id="page-info">加载中...</span>
+    <button id="next-btn" disabled>下一页 &#9654;</button>
+</div>
+<div id="tiff-container">
+    <canvas id="tiff-canvas"></canvas>
+</div>
+<script>
+    let pages = [];
+    let tiffBuffer = null;
+    let currentPage = 0;
+
+    function loadScriptSequentially(resources, index) {
+        return new Promise(function(resolve, reject) {
+            if (index >= resources.length) { resolve(); return; }
+            const res = resources[index];
+            const script = document.createElement('script');
+            script.src = res.url;
+            script.onload = () => {
+                resolve(loadScriptSequentially(resources, index + 1));
+            };
+            script.onerror = () => {
+                console.warn(`本地资源加载失败，切换CDN: ${res.cdn}`);
+                script.remove();
+                const cdnScript = document.createElement('script');
+                cdnScript.src = res.cdn;
+                cdnScript.onload = () => {
+                    resolve(loadScriptSequentially(resources, index + 1));
+                };
+                cdnScript.onerror = () => reject(new Error(`Failed to load ${res.url} or ${res.cdn}`));
+                document.head.appendChild(cdnScript);
+            };
+            document.head.appendChild(script);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/pako/pako.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js',
+                type: 'js'
+            },
+            {
+                url: '/static/utif/3.1.0/UTIF.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.min.js',
+                type: 'js'
+            }
+        ];
+
+        loadScriptSequentially(resources, 0)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('UTIF.js 资源加载失败:', error);
+            });
+    });
+
+    function renderPage(index) {
+        if (pages.length === 0) return;
+
+        const ifd = pages[index];
+        try {
+            UTIF.decodeImage(tiffBuffer, ifd);
+            const rgba = UTIF.toRGBA8(ifd);
+            const width = ifd.width;
+            const height = ifd.height;
+
+            const canvas = document.getElementById('tiff-canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.createImageData(width, height);
+            imageData.data.set(new Uint8Array(rgba));
+            ctx.putImageData(imageData, 0, 0);
+
+            currentPage = index;
+            document.getElementById('page-info').textContent = `${index + 1} / ${pages.length}`;
+            document.getElementById('prev-btn').disabled = index <= 0;
+            document.getElementById('next-btn').disabled = index >= pages.length - 1;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function load() {
+        const id = getUrlParam('id');
+        const container = document.getElementById('tiff-container');
+
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/wopi/files/${id}/contents`);
+            if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
+            const buffer = await response.arrayBuffer();
+
+            if (typeof UTIF === 'undefined') {
+                container.innerHTML = '<div class="empty">UTIF.js 未正确加载</div>';
+                return;
+            }
+
+            tiffBuffer = buffer;
+            pages = UTIF.decode(buffer);
+            if (pages.length === 0) {
+                throw new Error('TIFF 文件中未找到图像页');
+            }
+
+            if (pages.length > 1) {
+                document.getElementById('toolbar').style.display = 'flex';
+                document.getElementById('prev-btn').addEventListener('click', () => {
+                    try { renderPage(currentPage - 1); } catch (e) { showError(e.message); }
+                });
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    try { renderPage(currentPage + 1); } catch (e) { showError(e.message); }
+                });
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        if (currentPage > 0) { try { renderPage(currentPage - 1); } catch (err) { showError(err.message); } }
+                    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        if (currentPage < pages.length - 1) { try { renderPage(currentPage + 1); } catch (err) { showError(err.message); } }
+                    }
+                });
+            }
+
+            renderPage(0);
+        } catch (error) {
+            console.error('TIFF 加载失败:', error);
+            showError(error.message);
+        }
+    }
+
+    function showError(msg) {
+        const container = document.getElementById('tiff-container');
+        container.innerHTML = `<div class="empty">加载失败: ${escapeHtml(msg)}</div>`;
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+</script>
+</body>
+</html>

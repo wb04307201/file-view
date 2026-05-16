@@ -132,43 +132,62 @@ public class FileViewConfiguration {
     }
 
     @Bean
+    @ConditionalOnExpression("${file.view.csv.enable:true}")
+    public IView csvView() {
+        return new CsvView();
+    }
+
+    @Bean
+    @ConditionalOnExpression("${file.view.tiff.enable:true}")
+    public IView tiffView() {
+        return new TiffView();
+    }
+
+    @Bean
+    @ConditionalOnExpression("${file.view.ofd.enable:true}")
+    public IView ofdView() {
+        return new OfdView();
+    }
+
+    @Bean
     public ViewFactory viewFactory(List<IView> viewServices, FileViewProperties properties, IFileStorage fileStorage) {
         return new ViewFactory(viewServices, properties.getStrategies(), fileStorage);
     }
 
     @Bean("wb04307201FileViewRouter")
-    public RouterFunction<ServerResponse> fileViewRouter(IFileStorage storage,ViewFactory viewFactory) {
+    public RouterFunction<ServerResponse> fileViewRouter(IFileStorage storage, ViewFactory viewFactory, FileViewProperties properties) {
         RouterFunctions.Builder builder = RouterFunctions.route();
-
-        builder.GET("/file/view", request -> ServerResponse.ok().contentType(MediaType.TEXT_HTML).body(new ClassPathResource(("/list.html"))));
-
-
-        builder.POST("/file/view/upload", request -> {
-            Part part = request.multipartData().getFirst("file");
-            if (part == null) {
-                throw new FileUploadException("Required file part 'file' is missing in multipart request");
-            }
-            try (InputStream is = part.getInputStream()) {
-                return ServerResponse.ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(storage.upload(part.getSubmittedFileName(), is.readAllBytes(), part.getContentType()));
-            }
-        });
-
-        builder.GET("/file/view/list", request -> ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON).body(storage.list())
-        );
-
-        builder.POST("/file/view/deleteById", request -> {
-            Map<String, String> map = request.body(new ParameterizedTypeReference<HashMap<String, String>>() {
+        if (properties.isEnabledListView()) {
+            builder.GET("/file/view", request -> ServerResponse.ok().contentType(MediaType.TEXT_HTML).body(new ClassPathResource(("/list.html"))));
+        }
+        if (properties.getApi().isEnabledUpload()) {
+            builder.POST("/file/view/upload", request -> {
+                Part part = request.multipartData().getFirst("file");
+                if (part == null) {
+                    throw new FileUploadException("Required file part 'file' is missing in multipart request");
+                }
+                try (InputStream is = part.getInputStream()) {
+                    String rawFileName = part.getSubmittedFileName();
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(storage.upload(rawFileName, is.readAllBytes(), part.getContentType()));
+                }
             });
-            return ServerResponse.ok().body(storage.deleteById(map.get("id")));
-        });
-
+        }
+        if (properties.getApi().isEnabledList()) {
+            builder.GET("/file/view/list", request -> ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON).body(storage.list())
+            );
+        }
+        if (properties.getApi().isEnabledDelete()) {
+            builder.POST("/file/view/deleteById", request -> {
+                Map<String, String> map = request.body(new ParameterizedTypeReference<HashMap<String, String>>() {
+                });
+                return ServerResponse.ok().body(storage.deleteById(map.get("id")));
+            });
+        }
         builder.GET("/file/view/{id}", viewFactory::view);
-
         addWopiRoutes(builder, storage);
-
         return builder.build();
     }
 
@@ -180,16 +199,15 @@ public class FileViewConfiguration {
             String id = request.pathVariable("id");
             FileStorageInfo fsi = storage.findById(id);
             return ServerResponse.ok()
-                    .contentType(MediaType.parseMediaType(fsi.getMimeType())) // 根据文件名设置响应的内容类型
-                    .contentLength(fsi.getSize()) // 设置响应内容的长度
+                    .contentType(MediaType.parseMediaType(fsi.getMimeType()))
+                    .contentLength(fsi.getSize())
                     .build((res, req) -> {
                         try (OutputStream os = req.getOutputStream()) {
                             os.write(storage.getContentByLocation(fsi.getLocation()));
                             os.flush();
                         }
-                        return new ModelAndView(); // 返回空的ModelAndView对象
+                        return new ModelAndView();
                     });
         });
     }
-
 }

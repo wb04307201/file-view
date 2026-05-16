@@ -32,3 +32,5 @@ build/
 .vscode/
 /temp/
 /测试用/
+/.claude/
+/.playwright-mcp/

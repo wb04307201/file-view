@@ -4,35 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文件预览</title>
-    <link rel="stylesheet" type="text/css" href="/static/list.css"/>
-    <script src="/static/list.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/list.css?v=3"/>
+    <script src="/static/list.js?v=3"></script>
 </head>
 <body>
-<div class="container">
-    <div class="control-panel">
-    <button id="refreshBtn" class="btn btn-primary">刷新数据</button>
-    <!-- 添加文件上传控件 -->
-    <div class="upload-section">
-        <input type="file" id="fileInput" class="file-input">
-        <button id="uploadBtn" class="btn btn-toggle">选择文件</button>
-        <button id="submitUploadBtn" class="btn btn-success" style="display:none;">上传文件</button>
-    </div>
-</div>
-
-
-    <div class="table-container">
-        <div class="table-header">
-            <h4>上传的文件</h4>
+<div class="app">
+    <header class="header">
+        <div class="header-left">
+            <svg class="logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <h1>文件预览</h1>
         </div>
-        <div id="file-table">
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>正在加载数据...</p>
+        <div class="header-actions">
+            <input type="file" id="fileInput" class="file-input">
+            <button id="uploadBtn" class="btn-upload">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                上传文件
+            </button>
+            <button id="refreshBtn" class="btn-refresh">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"/>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                </svg>
+                刷新
+            </button>
+        </div>
+    </header>
+
+    <main class="content">
+        <div id="drop-zone" class="drop-zone">
+            <div id="file-table">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>正在加载数据...</p>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div id="toast">这是一个Toast通知消息</div>
+    <div id="toast" class="toast"></div>
 </div>
 </body>
 </html>

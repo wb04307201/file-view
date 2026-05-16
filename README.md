@@ -11,7 +11,7 @@
 [![fork](https://gitee.com/wb04307201/file-view/badge/fork.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![star](https://img.shields.io/github/stars/wb04307201/file-view)](https://github.com/wb04307201/file-view)
 [![fork](https://img.shields.io/github/forks/wb04307201/file-view)](https://github.com/wb04307201/file-view)  
-![MIT](https://img.shields.io/badge/License-Apache2.0-blue.svg) ![JDK](https://img.shields.io/badge/JDK-17+-green.svg) ![SpringBoot](https://img.shields.io/badge/Srping%20Boot-3+-green.svg)
+![MIT](https://img.shields.io/badge/License-Apache2.0-blue.svg) ![JDK](https://img.shields.io/badge/JDK-17+-green.svg) ![SpringBoot](https://img.shields.io/badge/Spring%20Boot-3+-green.svg)
 
 ---
 
@@ -21,8 +21,9 @@
 - Image files
 - Video files
 - Audio files
-- Document files (pdf, epub)
-- Text/Code files (sh, c, cpp, cs, css, diff, go, graphql, ini, java, js, json, kt, less, lua, mk, m, pl, php, phtml, txt, py, pyrepl, r, rb, rs, scss, sh, sql, swift, ts, vb, wasm, xml, yaml, yml)
+- Document files (pdf, epub, ofd)
+- TIFF image files
+- Text/Code files (c, cpp, cs, css, diff, go, graphql, html, ini, java, js, json, kt, less, lua, m, pl, php, phtml, py, pyrepl, r, rb, rs, scss, sh, sql, swift, ts, vb, wasm, xml, yaml, yml)
 - Markdown documents
 - 3D model files (3dm, 3ds, 3mf, amf, bim, brep, dae, fbx, fcstd, gltf, ifc, iges, step, stl, obj, off, ply, wrl)
 - Mind map files (xmind)
@@ -85,6 +86,12 @@ file:
         enable: true
     cad:
         enable: true
+    csv:
+        enable: true
+    tiff:
+        enable: true
+    ofd:
+        enable: true
     ## The following are default filename and processor matching rules, no configuration required by default
     strategies:
       - syntaxAndPattern: glob:*.bpmn
@@ -93,11 +100,11 @@ file:
         serviceName: dmn
       - syntaxAndPattern: glob:*.cmmn
         serviceName: cmmn
-      - syntaxAndPattern: glob:*.{sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,html,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
+      - syntaxAndPattern: glob:*.{c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
         serviceName: code
       - syntaxAndPattern: glob:*.epub
         serviceName: epub
-      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,tiff,webp,svg,raw,heic,cr2,nef,orf,sr2}
+      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,webp,svg,raw,heic,cr2,nef,orf,sr2}
         serviceName: image
       - syntaxAndPattern: glob:*.md
         serviceName: markdown
@@ -115,6 +122,12 @@ file:
         serviceName: o3d
       - syntaxAndPattern: glob:*.zip
         serviceName: zip
+      - syntaxAndPattern: glob:*.csv
+        serviceName: csv
+      - syntaxAndPattern: glob:*.{tif,tiff}
+        serviceName: tiff
+      - syntaxAndPattern: glob:*.ofd
+        serviceName: ofd
       - syntaxAndPattern: glob:*.{dwg,dxf}
         serviceName: cad
 ```
@@ -401,3 +414,5 @@ public class MinioFileStorageImpl implements IFileStorage {
 | Mind map files | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) |
 | Compressed files | [jszip](https://github.com/Stuk/jszip) |
 | CAD | [CAD-Viewer](https://github.com/mlightcad/cad-viewer) |
+| TIFF image files | [UTIF.js](https://github.com/photopea/UTIF.js) |
+| OFD files | [ofd.js](https://github.com/lyz810/ofd.js) |

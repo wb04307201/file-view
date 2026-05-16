@@ -21,8 +21,9 @@
 - 图片文件
 - 视频文件
 - 音频文件
-- 文档文件(pdf,epub)
-- 文本文件/代码文件(sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
+- 文档文件(pdf,epub,ofd)
+- TIFF图像文件
+- 文本文件/代码文件(c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
 - Markdown文档文件
 - 3D模型文件(3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl)
 - 思维导图文件(xmind)
@@ -83,7 +84,13 @@ file:
         enable: true
     zip:
         enable: true
-    cod:
+    cad:
+        enable: true
+    csv:
+        enable: true
+    tiff:
+        enable: true
+    ofd:
         enable: true
     ## 以下为默认的文件名和处理器匹配规则,默认无需配置
     strategies:
@@ -93,11 +100,11 @@ file:
         serviceName: dmn
       - syntaxAndPattern: glob:*.cmmn
         serviceName: cmmn
-      - syntaxAndPattern: glob:*.{sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,html,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
+      - syntaxAndPattern: glob:*.{c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
         serviceName: code
       - syntaxAndPattern: glob:*.epub
         serviceName: epub
-      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,tiff,webp,svg,raw,heic,cr2,nef,orf,sr2}
+      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,webp,svg,raw,heic,cr2,nef,orf,sr2}
         serviceName: image
       - syntaxAndPattern: glob:*.md
         serviceName: markdown
@@ -115,6 +122,12 @@ file:
         serviceName: o3d
       - syntaxAndPattern: glob:*.zip
         serviceName: zip
+      - syntaxAndPattern: glob:*.csv
+        serviceName: csv
+      - syntaxAndPattern: glob:*.{tif,tiff}
+        serviceName: tiff
+      - syntaxAndPattern: glob:*.ofd
+        serviceName: ofd
       - syntaxAndPattern: glob:*.{dwg,dxf}
         serviceName: cad
 ```
@@ -401,3 +414,5 @@ public class MinioFileStorageImpl implements IFileStorage {
 | 思维导图文件     | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer)  |
 | 压缩文件        | [jszip](https://github.com/Stuk/jszip)                               |
 | CAD              | [CAD-Viewer](https://github.com/mlightcad/cad-viewer)                  |
+| TIFF图像文件     | [UTIF.js](https://github.com/photopea/UTIF.js)                         |
+| OFD文件          | [ofd.js](https://github.com/lyz810/ofd.js)                             |

@@ -24,7 +24,6 @@
     </developers>
 
     <modules>
-        <module>file-view-web</module>
         <module>file-view</module>
         <module>file-view-spring-boot-autoconfigure</module>
         <module>file-view-spring-boot-starter</module>

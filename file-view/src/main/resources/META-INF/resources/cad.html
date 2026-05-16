@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAD Preview</title>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: #1a1a1a;
+        }
+        #cad-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ccc;
+            font-size: 14px;
+        }
+    </style>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js",
+            "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/",
+            "three/examples/jsm/controls/OrbitControls": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/controls/OrbitControls.js",
+            "three/examples/jsm/libs/stats.module": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/libs/stats.module.js",
+            "lodash-es": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/lodash.js",
+            "@mlightcad/data-model": "https://cdn.jsdelivr.net/npm/@mlightcad/data-model@1.7.33/dist/data-model.js",
+            "@mlightcad/cad-simple-viewer": "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.0/dist/index.js"
+        }
+    }
+    </script>
+</head>
+<body>
+<div id="cad-container">
+    <div id="loading">加载中...</div>
+</div>
+<script type="module">
+    import { AcApDocManager } from '@mlightcad/cad-simple-viewer';
+
+    function getUrlParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    const id = getUrlParam('id');
+    const container = document.getElementById('cad-container');
+    const loading = document.getElementById('loading');
+
+    if (!id) {
+        container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+    } else {
+        load();
+    }
+
+    async function load() {
+        try {
+            const fileResp = await fetch(`/wopi/files/${id}`);
+            if (!fileResp.ok) throw new Error('文件信息获取失败 (HTTP ' + fileResp.status + ')');
+            const file = await fileResp.json();
+
+            const contentResp = await fetch(`/wopi/files/${id}/contents`);
+            if (!contentResp.ok) throw new Error('文件内容获取失败 (HTTP ' + contentResp.status + ')');
+            const arrayBuffer = await contentResp.arrayBuffer();
+
+            await AcApDocManager.createInstance({
+                container: container,
+                autoResize: true,
+                useMainThreadDraw: true,
+                webworkerFileUrls: {
+                    dxfParser: '/static/cad-workers/dxf-parser-worker.js',
+                    dwgParser: '/static/cad-workers/libredwg-parser-worker.js',
+                    mtextRender: '/static/cad-workers/mtext-renderer-worker.js'
+                }
+            });
+            await AcApDocManager.instance.loadDefaultFonts();
+
+            const success = await AcApDocManager.instance.openDocument(file.BaseFileName, arrayBuffer, {
+                minimumChunkSize: 1000,
+                readOnly: true
+            });
+            if (!success) {
+                throw new Error('文档打开失败');
+            }
+
+            loading.remove();
+
+        } catch (error) {
+            console.error('CAD 加载失败:', error);
+            container.innerHTML = `<div class="empty">加载失败: ${escapeHtml(error.message)}</div>`;
+        }
+    }
+</script>
+</body>
+</html>

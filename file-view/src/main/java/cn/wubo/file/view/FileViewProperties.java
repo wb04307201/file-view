@@ -28,6 +28,8 @@ public class FileViewProperties {
     private ServiceProperties o3d;
     private ServiceProperties zip;
     private ServiceProperties cad;
+    private ServiceProperties csv;
+    private ServiceProperties tiff;
     private List<StrategyProperties> strategies = new ArrayList<>();
 
     public FileViewProperties() {
@@ -46,22 +48,38 @@ public class FileViewProperties {
         this.o3d = new ServiceProperties(true);
         this.zip = new ServiceProperties(true);
         this.cad = new ServiceProperties(true);
+        this.csv = new ServiceProperties(true);
+        this.tiff = new ServiceProperties(true);
         this.strategies.add(new StrategyProperties("glob:*.bpmn", "bpmn"));
         this.strategies.add(new StrategyProperties("glob:*.dmn", "dmn"));
         this.strategies.add(new StrategyProperties("glob:*.cmmn", "cmmn"));
-        this.strategies.add(new StrategyProperties("glob:*.{sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,html,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}", "code"));
+        this.strategies.add(new StrategyProperties("glob:*.{c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,html,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}", "code"));
         this.strategies.add(new StrategyProperties("glob:*.epub", "epub"));
-        this.strategies.add(new StrategyProperties("glob:*.{jpg,png,bmp,gif,tiff,webp,svg,raw,heic,cr2,nef,orf,sr2}", "image"));
+        this.strategies.add(new StrategyProperties("glob:*.{jpg,png,bmp,gif,webp,svg,raw,heic,cr2,nef,orf,sr2}", "image"));
         this.strategies.add(new StrategyProperties("glob:*.md", "markdown"));
         this.strategies.add(new StrategyProperties("glob:*.pdf", "pdf"));
         this.strategies.add(new StrategyProperties("glob:*.xmind", "xmind"));
         this.strategies.add(new StrategyProperties("glob:*.docx", "docx"));
-        this.strategies.add(new StrategyProperties("glob:*.{xlsx,xls}", "excel"));
+        this.strategies.add(new StrategyProperties("glob:*.csv", "csv"));
+        this.strategies.add(new StrategyProperties("glob:*.xlsx", "excel"));
         this.strategies.add(new StrategyProperties("glob:*.pptx", "pptx"));
         this.strategies.add(new StrategyProperties("glob:*.{3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl}", "o3d"));
         this.strategies.add(new StrategyProperties("glob:*.zip", "zip"));
-        this.strategies.add(new StrategyProperties("glob:*.{dwg,dxf}","cad"));
+        this.strategies.add(new StrategyProperties("glob:*.{dwg,dxf}", "cad"));
+        this.strategies.add(new StrategyProperties("glob:*.{tif,tiff}", "tiff"));
+        this.strategies.add(new StrategyProperties("glob:*.ofd", "ofd"));
     }
+
+    private boolean enabledListView = true;
+    private ApiProperties api = new ApiProperties();
+
+    @Data
+    public static class ApiProperties {
+        private boolean enabledList = true;
+        private boolean enabledUpload = true;
+        private boolean enabledDelete = true;
+    }
+
 
     @Data
     @NoArgsConstructor

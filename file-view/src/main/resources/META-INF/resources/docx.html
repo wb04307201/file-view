@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCX Preview</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        #docx-container {
+            height: 100vh;
+            overflow: auto;
+            background: #fff;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #docx-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="docx-container"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/jszip/3.10.1/jszip.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js',
+                type: 'js'
+            },
+            {
+                url: '/static/docx-preview/0.3.7/docx-preview.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/docx-preview@0.3.7/dist/docx-preview.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('docx-preview 资源加载失败:', error);
+            });
+    });
+
+    function load() {
+        const id = getUrlParam('id');
+        const container = document.getElementById('docx-container');
+
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
+
+        fetch(`/wopi/files/${id}/contents`)
+            .then(response => {
+                if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
+                return response.blob();
+            })
+            .then(blob => {
+                docx.renderAsync(blob, container, undefined, {
+                    className: 'docx',
+                    inWrapper: false,
+                    ignoreWidth: false,
+                    ignoreHeight: false,
+                    ignoreFonts: false,
+                    breakPages: true,
+                    experimental: false,
+                    trimXmlDeclaration: true,
+                });
+            })
+            .catch(error => {
+                console.error('DOCX 加载失败:', error);
+                container.innerHTML = `<div class="empty">加载失败: ${escapeHtml(error.message)}</div>`;
+            });
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+</script>
+</body>
+</html>

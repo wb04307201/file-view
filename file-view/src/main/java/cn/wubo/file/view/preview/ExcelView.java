@@ -14,6 +14,6 @@ public class ExcelView implements IView {
     @Override
     public ServerResponse handle(ServerRequest request) {
         String id = request.pathVariable("id");
-        return ServerResponse.temporaryRedirect(URI.create(String.format("/?path=excel&id=%s",id))).build();
+        return ServerResponse.temporaryRedirect(URI.create(String.format("/excel.html?id=%s",id))).build();
     }
 }

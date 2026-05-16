@@ -14,6 +14,6 @@ public class PptxView implements IView {
     @Override
     public ServerResponse handle(ServerRequest request) {
         String id = request.pathVariable("id");
-        return ServerResponse.temporaryRedirect(URI.create(String.format("/?path=pptx&id=%s",id))).build();
+        return ServerResponse.temporaryRedirect(URI.create(String.format("/pptx.html?id=%s",id))).build();
     }
 }
