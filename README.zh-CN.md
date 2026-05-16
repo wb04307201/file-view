@@ -6,7 +6,7 @@
 
 > 一个 Spring Boot 3.x 的轻量级文件在线预览 Starter 组件，通过简单的 Maven 依赖引入即可为项目提供 docx/xlsx/pptx/PDF/BPMN/图片/视频/代码/3D 模型/CAD 等 20+ 种文件格式的在线预览能力。
 
-[![](https://jitpack.io/v/com.gitee.wb04307201/file-view.svg)](https://jitpack.io/#com.gitee.wb04307201/file-view)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.wb04307201/file-view-spring-boot-starter?style=flat-square)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![fork](https://gitee.com/wb04307201/file-view/badge/fork.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![star](https://img.shields.io/github/stars/wb04307201/file-view)](https://github.com/wb04307201/file-view)
@@ -32,20 +32,10 @@
 
 ## 引入
 
-### 增加 JitPack 仓库
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-### Maven依赖
+### 添加Maven依赖
 ```xml
 <dependency>
-    <groupId>com.gitee.wb04307201.file-view</groupId>
+    <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
     <version>1.3.3</version>
 </dependency>
@@ -145,7 +135,7 @@ file:
 <dependency>
     <groupId>com.gitee.wb04307201.file-view</groupId>
     <artifactId>file-view-static</artifactId>
-    <version>1.3.1</version>
+    <version>1.3.3</version>
 </dependency>
 ```
 
@@ -261,6 +251,12 @@ file:
         enable: false
     strategies:
       - ...
+#      - syntaxAndPattern: glob:*.docx
+#        serviceName: docx
+#      - syntaxAndPattern: glob:*.xlsx
+#        serviceName: excel
+#      - syntaxAndPattern: glob:*.pptx
+#        serviceName: pptx
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
