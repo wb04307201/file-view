@@ -3,25 +3,34 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gitee.wb04307201</groupId>
+    <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <packaging>pom</packaging>
-    <url>
-        https://gitee.com/wb04307201/file-view
-    </url>
+    <name>file-view-parent</name>
+    <description>一个 Spring Boot 3.x 的轻量级文件在线预览 Starter 组件，通过简单的 Maven 依赖引入即可为项目提供 docx/xlsx/pptx/PDF/BPMN/图片/视频/代码/3D 模型/CAD 等 20+ 种文件格式的在线预览能力</description>
+    <url>https://github.com/wb04307201/file-view</url>
+
+    <developers>
+        <developer>
+            <id>wb04307201</id>
+            <name>wubo</name>
+            <email>wubo_aaa@163.com</email>
+        </developer>
+    </developers>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-    <developers>
-        <developer>
-            <name>wubo</name>
-        </developer>
-    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/wb04307201/file-view.git</connection>
+        <developerConnection>scm:git:git@github.com:wb04307201/file-view.git</developerConnection>
+        <url>https://github.com/wb04307201/file-view</url>
+    </scm>
 
     <modules>
         <module>file-view</module>
@@ -35,9 +44,8 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot.version>3.5.6</spring-boot.version>
-        <lombok.version>1.18.38</lombok.version>
-        <logback.version>1.5.18</logback.version>
+        <spring-boot.version>3.5.14</spring-boot.version>
+        <lombok.version>1.18.46</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -54,12 +62,77 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 3. GPG 签名插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 4. 新平台发布插件 (核心) -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.10.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish> <!-- 自动发布，无需手动在 UI 点击 -->
+                    <waitUntil>published</waitUntil> <!-- 等待直到发布完成 -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

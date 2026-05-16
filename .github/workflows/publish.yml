@@ -55,7 +55,7 @@ jobs:
         run: mvn versions:set -DnewVersion=${{ steps.version.outputs.VERSION }} -DgenerateBackupPoms=false -B
 
       - name: Publish to Central
-        run: mvn -B clean deploy -pl '!spring-ai-loom-agent-test'
+        run: mvn -B clean deploy -pl '!file-view-test'
         env:
           # GPG 密码
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
