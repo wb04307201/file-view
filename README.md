@@ -133,7 +133,7 @@ Some file types use built-in renderers, such as: pdf, epub, xmind, zip, image, c
 The JS library resources are loaded from jsDelivr. If you cannot get resources from jsDelivr, you can add `file-view-static` to localize the JS libraries.
 ```xml
 <dependency>
-    <groupId>com.gitee.wb04307201.file-view</groupId>
+    <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-static</artifactId>
     <version>1.3.3</version>
 </dependency>
