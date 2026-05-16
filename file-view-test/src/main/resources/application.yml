@@ -1,8 +1,12 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+
 spring:
     servlet:
       multipart:
-        max-file-size: 100MB  # ?????????????100MB
-        max-request-size: 100MB  # ???????????100MB????????
+        max-file-size: 100MB
+        max-request-size: 100MB
 
 
 file:
@@ -24,7 +28,7 @@ file:
         serviceName: code
       - syntaxAndPattern: glob:*.epub
         serviceName: epub
-      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,tiff,webp,svg,raw,heic,cr2,nef,orf,sr2}
+      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,webp,svg,raw,heic,cr2,nef,orf,sr2}
         serviceName: image
       - syntaxAndPattern: glob:*.md
         serviceName: markdown
@@ -32,11 +36,11 @@ file:
         serviceName: pdf
       - syntaxAndPattern: glob:*.xmind
         serviceName: xmind
-      - syntaxAndPattern: glob:*.ofd
-        serviceName: ofd
 #      - syntaxAndPattern: glob:*.docx
 #        serviceName: docx
-#      - syntaxAndPattern: glob:*.{xlsx,xls}
+      - syntaxAndPattern: glob:*.csv
+        serviceName: csv
+#      - syntaxAndPattern: glob:*.xlsx
 #        serviceName: excel
 #      - syntaxAndPattern: glob:*.pptx
 #        serviceName: pptx
@@ -46,6 +50,10 @@ file:
         serviceName: zip
       - syntaxAndPattern: glob:*.{dwg,dxf}
         serviceName: cad
+      - syntaxAndPattern: glob:*.{tif,tiff}
+        serviceName: tiff
+      - syntaxAndPattern: glob:*.ofd
+        serviceName: ofd
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 

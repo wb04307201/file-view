@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFD Preview</title>
+    <script src="/static/common.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "xq-doc-viewer": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/xq-doc-viewer.js",
+            "xq-doc-viewer/style.css": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/style.css",
+            "./index-CLnOWivc.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/index-CLnOWivc.js",
+            "./jszip.min-DCoq2tGo.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/jszip.min-DCoq2tGo.js",
+            "./_commonjsHelpers-BkfeUUK-.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/_commonjsHelpers-BkfeUUK-.js",
+            "./ofd-CFJFhjy1.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/ofd-CFJFhjy1.js",
+            "./ofd-coHlYOm1.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/ofd-coHlYOm1.cjs",
+            "./ofd-wm_8H8HT.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/ofd-wm_8H8HT.js",
+            "./_commonjs-dynamic-modules-BpilXLfW.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/_commonjs-dynamic-modules-BpilXLfW.js",
+            "./pdf-Db2WnCsJ.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/pdf-Db2WnCsJ.cjs",
+            "./pdf-BqLiQKWJ.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/pdf-BqLiQKWJ.js",
+            "./pdf.worker.min-BRQcyEst.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/pdf.worker.min-BRQcyEst.js",
+            "./pdf-DaZsfPoD.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/pdf-DaZsfPoD.js",
+            "./pdf-CPFOA6px.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/pdf-CPFOA6px.cjs",
+            "./pdf.worker.min--2-1OOOG.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/pdf.worker.min--2-1OOOG.cjs",
+            "./docx-preview-BjY-XUKz.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/docx-preview-BjY-XUKz.js",
+            "./docx-preview-CCQJh0Nl.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/docx-preview-CCQJh0Nl.cjs",
+            "./docx-3_8hAKhS.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/docx-3_8hAKhS.js",
+            "./docx-BZVUl7LI.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/docx-BZVUl7LI.cjs",
+            "./pptx-DEfl8bFi.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/pptx-DEfl8bFi.js",
+            "./pptx-ZZrPhftQ.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/pptx-ZZrPhftQ.cjs",
+            "./excel--CZO_Atx.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/excel--CZO_Atx.js",
+            "./excel-CKvnQ7Zk.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/excel-CKvnQ7Zk.cjs",
+            "./exceljs.min-1FK5vKo7.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/exceljs.min-1FK5vKo7.js",
+            "./exceljs.min-CKJyzlWl.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/exceljs.min-CKJyzlWl.cjs",
+            "./csv-g3ThV4pJ.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/csv-g3ThV4pJ.js",
+            "./csv-C25iH2sY.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/csv-C25iH2sY.cjs",
+            "./papaparse.min-Jwv9XY01.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/papaparse.min-Jwv9XY01.js",
+            "./papaparse.min-gZxxhAeT.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/papaparse.min-gZxxhAeT.cjs",
+            "./image-CdIfVf-P.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/image-CdIfVf-P.js",
+            "./image-DWfoeHxV.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/image-DWfoeHxV.cjs",
+            "./video-DTuztP69.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/video-DTuztP69.js",
+            "./video-aZIwT53V.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/video-aZIwT53V.cjs",
+            "./audio-C_AqQyrA.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/audio-C_AqQyrA.js",
+            "./audio-uAkxxYFn.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/audio-uAkxxYFn.cjs",
+            "./text-Yl72XpeG.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/text-Yl72XpeG.js",
+            "./text-Dapuuz8_.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/text-Dapuuz8_.cjs",
+            "./markdown-BNL7hWuE.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/markdown-BNL7hWuE.js",
+            "./markdown-CgtdUpkR.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/markdown-CgtdUpkR.cjs",
+            "./marked.esm-BeBgw3sV.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/marked.esm-BeBgw3sV.cjs",
+            "./marked.esm-BXI-O3kn.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/marked.esm-BXI-O3kn.js",
+            "./index-B2aZg82B.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/index-B2aZg82B.js",
+            "./index-BG7UarhO.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/index-BG7UarhO.cjs",
+            "./index-BnY7ptCj.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/index-BnY7ptCj.cjs",
+            "./index-COlat9LO.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/index-COlat9LO.cjs",
+            "./index-CUbxk-54.js": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/index-CUbxk-54.js",
+            "./_commonjs-dynamic-modules-DMkBISW1.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/_commonjs-dynamic-modules-DMkBISW1.cjs",
+            "./_commonjsHelpers-DwTZ_eVU.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/_commonjsHelpers-DwTZ_eVU.cjs",
+            "./xq-doc-viewer.cjs": "https://cdn.jsdelivr.net/npm/xq-doc-viewer@0.1.8/dist/xq-doc-viewer.cjs"
+        }
+    }
+    </script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: #525659;
+        }
+        #ofd-container {
+            width: 100%;
+            height: 100vh;
+        }
+        #ofd-container .xq-doc-viewer {
+            width: 100%;
+            height: 100%;
+        }
+        .loading-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="ofd-container">
+    <div class="loading-overlay">解析中...</div>
+</div>
+<script type="module">
+    import { createViewer } from 'xq-doc-viewer';
+
+    const id = getUrlParam('id');
+    const container = document.getElementById('ofd-container');
+
+    if (!id) {
+        container.innerHTML = '<div class="loading-overlay">缺少文件 ID</div>';
+    } else {
+        try {
+            const viewer = createViewer({
+                target: '#ofd-container',
+                file: `/wopi/files/${id}/contents`,
+                type: 'ofd',
+                locale: 'zh-CN',
+                theme: 'light',
+                toolbar: true,
+                onReady() {
+                    const loading = container.querySelector('.loading-overlay');
+                    if (loading) loading.remove();
+                },
+                onError(err) {
+                    console.error('OFD 加载失败:', err);
+                    const msg = err?.message || String(err);
+                    const loading = container.querySelector('.loading-overlay');
+                    if (loading) {
+                        loading.textContent = '加载失败: ' + msg;
+                    } else {
+                        container.innerHTML = '<div class="loading-overlay">加载失败: ' + escapeHtml(msg) + '</div>';
+                    }
+                }
+            });
+            await viewer.mount();
+        } catch (error) {
+            console.error('OFD 加载失败:', error);
+            const msg = error?.message || String(error);
+            const loading = container.querySelector('.loading-overlay');
+            if (loading) {
+                loading.textContent = '加载失败: ' + msg;
+            } else {
+                container.innerHTML = '<div class="loading-overlay">加载失败: ' + escapeHtml(msg) + '</div>';
+            }
+        }
+    }
+</script>
+</body>
+</html>

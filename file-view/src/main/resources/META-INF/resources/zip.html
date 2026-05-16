@@ -148,6 +148,15 @@
             background-color: #cce5ff;
             color: #004085;
         }
+
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
     </style>
 
 </head>
@@ -198,6 +207,11 @@
         const fileTableBody = document.getElementById('file-table-body');
         const fileContentDiv = document.getElementById('file-content');
 
+        if (!id) {
+            fileTableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:40px;"><div class="empty">缺少文件 ID</div></td></tr>';
+            return;
+        }
+
         try {
             const response = await fetch(`/wopi/files/${id}/contents`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -226,7 +240,7 @@
 
                 // 添加文件信息到行中
                 row.innerHTML = `
-                    <td>${relativePath}</td>
+                    <td>${escapeHtml(relativePath)}</td>
                     <td><span class="file-type ${isDirectory ? 'type-directory' : 'type-file'}">${isDirectory ? '文件夹' : '文件'}</span></td>
                     <td class="file-size">${isDirectory ? '-' : fileEntry._data.uncompressedSize + ' bytes'}</td>
                     <td>

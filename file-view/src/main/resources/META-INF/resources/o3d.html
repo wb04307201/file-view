@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Preview</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        #online_3d_viewer {
+            width: 100%;
+            height: 100vh;
+        }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="online_3d_viewer"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/three/0.184.0/three.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.min.js',
+                type: 'js'
+            },
+            {
+                url: '/static/online-3d-viewer/0.18.0/o3dv.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/online-3d-viewer@0.18.0/build/o3dv.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('online-3d-viewer 资源加载失败:', error);
+            });
+    });
+
+    function load() {
+        const id = getUrlParam('id');
+        const parentDiv = document.getElementById('online_3d_viewer');
+
+        if (!id) {
+            parentDiv.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
+
+        if (typeof OV === 'undefined') {
+            parentDiv.innerHTML = '<div class="empty">3D viewer 未正确加载</div>';
+            return;
+        }
+
+        fetch(`/wopi/files/${id}/contents`)
+            .then(response => {
+                if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
+                return response.blob();
+            })
+            .then(blob => {
+                return fetch(`/wopi/files/${id}`)
+                    .then(res => res.json())
+                    .then(file => new File([blob], file.BaseFileName))
+                    .then(dataFile => {
+                        const viewer = new OV.EmbeddedViewer(parentDiv, {});
+                        viewer.LoadModelFromFileList([dataFile]);
+                    });
+            })
+            .catch(error => {
+                console.error('3D 模型加载失败:', error);
+                parentDiv.innerHTML = `<div class="empty">加载失败: ${escapeHtml(error.message)}</div>`;
+            });
+    }
+
+</script>
+</body>
+</html>

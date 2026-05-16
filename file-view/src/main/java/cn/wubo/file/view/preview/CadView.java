@@ -14,6 +14,6 @@ public class CadView implements IView {
     @Override
     public ServerResponse handle(ServerRequest request) {
         String id = request.pathVariable("id");
-        return ServerResponse.temporaryRedirect(URI.create(String.format("/?path=cad&id=%s",id))).build();
+        return ServerResponse.temporaryRedirect(URI.create(String.format("/cad.html?id=%s",id))).build();
     }
 }

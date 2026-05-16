@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Preview</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+        #csv-container {
+            height: 100vh;
+            overflow: auto;
+            background: #fff;
+        }
+        #csv-container table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+        }
+        #csv-container th, #csv-container td {
+            border: 1px solid #e0e0e0;
+            padding: 8px 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        #csv-container th {
+            background: #f0f0f0;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        #csv-container tr:hover td {
+            background: #f8f8f8;
+        }
+        #csv-container .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="csv-container"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/papaparse/5.5.3/papaparse.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('PapaParse 资源加载失败:', error);
+                alert('CSV 解析库加载失败');
+            });
+    });
+
+    function load() {
+        const id = getUrlParam('id');
+        const container = document.getElementById('csv-container');
+
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
+
+        fetch(`/wopi/files/${id}/contents`)
+            .then(response => {
+                if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
+                return response.text();
+            })
+            .then(text => {
+                if (!text.trim()) {
+                    container.innerHTML = '<div class="empty">文件为空</div>';
+                    return;
+                }
+
+                const result = Papa.parse(text, { skipEmptyLines: true });
+                const rows = result.data;
+
+                if (rows.length === 0) {
+                    container.innerHTML = '<div class="empty">没有数据</div>';
+                    return;
+                }
+
+                let html = '<table>';
+                // First row as header
+                html += '<thead><tr>';
+                rows[0].forEach(cell => {
+                    html += `<th>${escapeHtml(String(cell))}</th>`;
+                });
+                html += '</tr></thead>';
+
+                // Body
+                html += '<tbody>';
+                for (let i = 1; i < rows.length; i++) {
+                    html += '<tr>';
+                    rows[i].forEach(cell => {
+                        html += `<td>${escapeHtml(String(cell))}</td>`;
+                    });
+                    html += '</tr>';
+                }
+                html += '</tbody></table>';
+
+                container.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('CSV 加载失败:', error);
+                container.innerHTML = `<div class="empty">加载失败: ${escapeHtml(error.message)}</div>`;
+            });
+    }
+
+</script>
+</body>
+</html>

@@ -10,11 +10,28 @@
             height: 100%;
             padding: 0;
             margin: 0;
+            background: #1a1a1a;
+        }
+        #image-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-<img id="image" style="display: none">
+<div id="image-container">
+    <img id="image" style="display: none">
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const resources = [
@@ -40,8 +57,14 @@
     });
 
     function load() {
-        const image = document.getElementById('image')
+        const image = document.getElementById('image');
+        const container = document.getElementById('image-container');
         const id = getUrlParam('id');
+
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
 
         fetch(`/wopi/files/${id}`)
             .then(response => response.json())
@@ -50,7 +73,7 @@
                 image.src = `/wopi/files/${id}/contents`;
                 image.onload = function () {
                     const viewer = new Viewer(image, {
-                        inline: true, // 模态框模式（全屏查看）
+                        inline: true,
                         toolbar: {
                             zoomIn: 4,
                             zoomOut: 4,
@@ -61,16 +84,20 @@
                             flipHorizontal: 4,
                             flipVertical: 4,
                         },
-                        title: true,        // 显示图片标题（基于 alt 属性）
-                        movable: true,       // 允许图片拖动
-                        zoomable: true,      // 允许缩放
-                        rotatable: true,     // 允许旋转
-                        scalable: true,      // 允许翻转
-                        transition: true,    // 启用过渡动画
-                        keyboard: true,       // 启用键盘快捷键（如 Esc 退出）
+                        title: true,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                        transition: true,
+                        keyboard: true,
                     });
                 };
             })
+            .catch(error => {
+                console.error('could not fetch file content', error);
+                showError('image-container', error.message);
+            });
     }
 </script>
 </body>

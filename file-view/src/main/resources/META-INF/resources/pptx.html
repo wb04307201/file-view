@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPTX Preview</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: #1a1a1a;
+            width: 100%;
+            box-sizing: border-box;
+            justify-content: center;
+        }
+        #toolbar button {
+            background: #444;
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #toolbar button:disabled {
+            background: #2a2a2a;
+            color: #666;
+            cursor: not-allowed;
+        }
+        #toolbar button:not(:disabled):hover {
+            background: #555;
+        }
+        #slide-info {
+            color: #ccc;
+            font-size: 14px;
+            min-width: 80px;
+            text-align: center;
+        }
+        #pptx-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            overflow: auto;
+        }
+        #pptx-canvas {
+            max-width: 95%;
+            max-height: calc(100vh - 44px);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            background: #fff;
+            width: auto !important;
+            height: auto !important;
+        }
+        .empty {
+            color: #999;
+            font-size: 16px;
+        }
+        #loading {
+            color: #ccc;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div id="toolbar">
+    <button id="prev-btn" disabled>&#9664; 上一页</button>
+    <span id="slide-info">加载中...</span>
+    <button id="next-btn" disabled>下一页 &#9654;</button>
+</div>
+<div id="pptx-container">
+    <canvas id="pptx-canvas"></canvas>
+</div>
+<script>
+    let viewer = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/jszip/3.10.1/jszip.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js',
+                type: 'js'
+            },
+            {
+                url: '/static/chart.js/4.4.1/chart.umd.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
+                type: 'js'
+            },
+            {
+                url: '/static/pptxviewjs/1.1.9/PptxViewJS.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/pptxviewjs@1.1.9/dist/PptxViewJS.min.js',
+                type: 'js'
+            }
+        ];
+
+        loadSequential(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('PptxViewJS 资源加载失败:', error);
+            });
+    });
+
+    function loadSequential(resources, index = 0) {
+        return new Promise((resolve, reject) => {
+            if (index >= resources.length) {
+                resolve();
+                return;
+            }
+            const {url, cdn, type} = resources[index];
+            const element = document.createElement(type === 'css' ? 'link' : 'script');
+            if (type === 'css') {
+                element.rel = 'stylesheet';
+                element.href = url;
+            } else {
+                element.src = url;
+            }
+            element.onload = () => loadSequential(resources, index + 1).then(resolve).catch(reject);
+            element.onerror = () => {
+                console.warn(`本地资源加载失败，切换CDN: ${cdn}`);
+                element.remove();
+                const cdnElement = document.createElement(type === 'css' ? 'link' : 'script');
+                if (type === 'css') {
+                    cdnElement.rel = 'stylesheet';
+                    cdnElement.href = cdn;
+                } else {
+                    cdnElement.src = cdn;
+                }
+                cdnElement.onload = () => loadSequential(resources, index + 1).then(resolve).catch(reject);
+                cdnElement.onerror = () => reject(`Failed to load ${url}`);
+                document.head.appendChild(cdnElement);
+            };
+            document.head.appendChild(element);
+        });
+    }
+
+    function updateToolbar() {
+        const current = viewer.getCurrentSlideIndex();
+        const total = viewer.getSlideCount();
+        document.getElementById('slide-info').textContent = `${current + 1} / ${total}`;
+        document.getElementById('prev-btn').disabled = current <= 0;
+        document.getElementById('next-btn').disabled = current >= total - 1;
+    }
+
+    async function load() {
+        const id = getUrlParam('id');
+        const container = document.getElementById('pptx-container');
+        const canvas = document.getElementById('pptx-canvas');
+        const slideInfo = document.getElementById('slide-info');
+
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/wopi/files/${id}/contents`);
+            if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
+            const buffer = await response.arrayBuffer();
+
+            if (typeof PptxViewJS === 'undefined') {
+                container.innerHTML = '<div class="empty">PptxViewJS 未正确加载</div>';
+                return;
+            }
+
+            slideInfo.textContent = '解析中...';
+            viewer = new PptxViewJS.PPTXViewer({canvas: canvas});
+            await viewer.loadFile(buffer);
+            await viewer.render();
+            canvas.removeAttribute('style');
+            updateToolbar();
+
+            viewer.on('renderComplete', () => {
+                canvas.removeAttribute('style');
+                updateToolbar();
+            });
+
+            document.getElementById('prev-btn').addEventListener('click', async () => {
+                await viewer.previousSlide();
+                await viewer.render();
+            });
+
+            document.getElementById('next-btn').addEventListener('click', async () => {
+                await viewer.nextSlide();
+                await viewer.render();
+            });
+
+            document.addEventListener('keydown', async (e) => {
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (viewer.getCurrentSlideIndex() > 0) {
+                        await viewer.previousSlide();
+                        await viewer.render();
+                    }
+                } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (viewer.getCurrentSlideIndex() < viewer.getSlideCount() - 1) {
+                        await viewer.nextSlide();
+                        await viewer.render();
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('PPTX 加载失败:', error);
+            container.innerHTML = `<div class="empty">加载失败: ${escapeHtml(error.message)}</div>`;
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -10,6 +10,15 @@
             height: 100%;
             padding: 0;
             margin: 0;
+            background: #f5f5f5;
+        }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -36,16 +45,28 @@
 
     function load(){
         const id = getUrlParam('id');
+        const container = document.getElementById('xmind-container');
+
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
 
         const viewer = new XMindEmbedViewer({
-            el: '#xmind-container', // HTMLElement | HTMLIFrameElement | string
-            // 如果在中国大陆境内速度慢，可以添加的参数 `region: 'cn'` 改为使用 xmind.cn 的图库作为依赖。
-             region: 'cn', //optinal, global(default) or cn
+            el: '#xmind-container',
+            region: 'cn',
             styles: {height: "100%", width: "100%"},
         });
         fetch(`/wopi/files/${id}/contents`)
-            .then(res => res.arrayBuffer())
+            .then(response => {
+                if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
+                return response.arrayBuffer();
+            })
             .then(file => viewer.load(file))
+            .catch(error => {
+                console.error('could not fetch file content', error);
+                showError('xmind-container', error.message);
+            });
     }
 </script>
 </body>

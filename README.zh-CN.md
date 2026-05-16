@@ -4,9 +4,9 @@
   <a href="README.md">English</a> | 中文
 </div>
 
-> 一个轻量级文件预览的starter组件，支持多种文档和媒体格式的在线预览，采用模块化架构，易于扩展和定制。
+> 一个 Spring Boot 3.x 的轻量级文件在线预览 Starter 组件，通过简单的 Maven 依赖引入即可为项目提供 docx/xlsx/pptx/PDF/BPMN/图片/视频/代码/3D 模型/CAD 等 20+ 种文件格式的在线预览能力。
 
-[![](https://jitpack.io/v/com.gitee.wb04307201/file-view.svg)](https://jitpack.io/#com.gitee.wb04307201/file-view)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.wb04307201/file-view-spring-boot-starter?style=flat-square)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![fork](https://gitee.com/wb04307201/file-view/badge/fork.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![star](https://img.shields.io/github/stars/wb04307201/file-view)](https://github.com/wb04307201/file-view)
@@ -21,8 +21,9 @@
 - 图片文件
 - 视频文件
 - 音频文件
-- 文档文件(pdf,ofd,epub)
-- 文本文件/代码文件(sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
+- 文档文件(pdf,epub,ofd)
+- TIFF图像文件
+- 文本文件/代码文件(c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
 - Markdown文档文件
 - 3D模型文件(3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl)
 - 思维导图文件(xmind)
@@ -31,22 +32,12 @@
 
 ## 引入
 
-### 增加 JitPack 仓库
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-### Maven依赖
+### 添加Maven依赖
 ```xml
 <dependency>
-    <groupId>com.gitee.wb04307201.file-view</groupId>
+    <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
 </dependency>
 ```
 
@@ -73,8 +64,6 @@ file:
         enable: true
     xmind:
         enable: true
-    ofd:
-        enable: true
     docx:
         enable: true
     excel:
@@ -85,7 +74,13 @@ file:
         enable: true
     zip:
         enable: true
-    cod:
+    cad:
+        enable: true
+    csv:
+        enable: true
+    tiff:
+        enable: true
+    ofd:
         enable: true
     ## 以下为默认的文件名和处理器匹配规则,默认无需配置
     strategies:
@@ -95,11 +90,11 @@ file:
         serviceName: dmn
       - syntaxAndPattern: glob:*.cmmn
         serviceName: cmmn
-      - syntaxAndPattern: glob:*.{sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,html,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
+      - syntaxAndPattern: glob:*.{c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
         serviceName: code
       - syntaxAndPattern: glob:*.epub
         serviceName: epub
-      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,tiff,webp,svg,raw,heic,cr2,nef,orf,sr2}
+      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,webp,svg,raw,heic,cr2,nef,orf,sr2}
         serviceName: image
       - syntaxAndPattern: glob:*.md
         serviceName: markdown
@@ -107,8 +102,6 @@ file:
         serviceName: pdf
       - syntaxAndPattern: glob:*.xmind
         serviceName: xmind
-      - syntaxAndPattern: glob:*.ofd
-        serviceName: ofd
       - syntaxAndPattern: glob:*.docx
         serviceName: docx
       - syntaxAndPattern: glob:*.{xlsx,xls}
@@ -119,6 +112,12 @@ file:
         serviceName: o3d
       - syntaxAndPattern: glob:*.zip
         serviceName: zip
+      - syntaxAndPattern: glob:*.csv
+        serviceName: csv
+      - syntaxAndPattern: glob:*.{tif,tiff}
+        serviceName: tiff
+      - syntaxAndPattern: glob:*.ofd
+        serviceName: ofd
       - syntaxAndPattern: glob:*.{dwg,dxf}
         serviceName: cad
 ```
@@ -136,7 +135,7 @@ file:
 <dependency>
     <groupId>com.gitee.wb04307201.file-view</groupId>
     <artifactId>file-view-static</artifactId>
-    <version>1.3.1</version>
+    <version>1.3.3</version>
 </dependency>
 ```
 
@@ -251,6 +250,13 @@ file:
     pptx:
         enable: false
     strategies:
+      - ...
+#      - syntaxAndPattern: glob:*.docx
+#        serviceName: docx
+#      - syntaxAndPattern: glob:*.xlsx
+#        serviceName: excel
+#      - syntaxAndPattern: glob:*.pptx
+#        serviceName: pptx
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
@@ -392,17 +398,21 @@ public class MinioFileStorageImpl implements IFileStorage {
 
 ## 使用的第三方库
 
-| 文件类型         | 第三方库                                                                 |
-|------------------|--------------------------------------------------------------------------|
-| office文件       | [vue-office](https://github.com/501351981/vue-office)                |
-| 业务流程管理文件   | [bpmn-io](https://github.com/bpmn-io)                                |
-| 图片文件         | [viewerjs](https://github.com/fengyuanchen/viewerjs)                   |
-| 文档文件(pdf)    | [pdfobject](https://github.com/pipwerks/PDFObject)                     |
-| 文档文件(ofd)    | [ofd.js](https://github.com/DLTech21/ofd.js)                         |
-| 文档文件(epub)   | [epub.js](https://github.com/futurepress/epub.js)                     |
-| 文本文件/代码文件 | [highlight.js](https://github.com/highlightjs/highlight.js)             |
-| Markdown文档文件 | [vditor](https://github.com/Vanessa219/vditor)                       |
-| 3D模型文件      | [Online3DViewer](https://github.com/kovacsv/Online3DViewer)           |
-| 思维导图文件     | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer)  |
-| 压缩文件        | [jszip](https://github.com/Stuk/jszip)                               |
-| CAD              | [CAD-Viewer](https://github.com/mlightcad/cad-viewer)                  |
+| 文件类型          | 第三方库                                                                                                                                        |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| DOCX 文件        | [docx-preview](https://github.com/VolodymyrBaydak/docx-preview) + [JSZip](https://github.com/Stuk/jszip)                                    |
+| XLSX 文件        | [SheetJS](https://github.com/SheetJS/sheetjs)                                                                                               |
+| PPTX 文件        | [pptxviewjs](https://github.com/nicktomach/pptxviewjs) + [Chart.js](https://github.com/chartjs/Chart.js)                                    |
+| 业务流程管理文件   | [bpmn-js](https://github.com/bpmn-io/bpmn-js) / [cmmn-js](https://github.com/bpmn-io/cmmn-js) / [dmn-js](https://github.com/bpmn-io/dmn-js) |
+| 图片文件         | [Viewer.js](https://github.com/fengyuanchen/viewerjs)                                                                                       |
+| 文档文件(PDF)    | [PDFObject](https://github.com/pipwerks/PDFObject)                                                                                          |
+| 文档文件(EPUB)   | [epub.js](https://github.com/futurepress/epub.js) + [JSZip](https://github.com/Stuk/jszip)                                                  |
+| 文本文件/代码文件 | [highlight.js](https://github.com/highlightjs/highlight.js)                                                                                 |
+| Markdown文档文件 | [Vditor](https://github.com/Vanessa219/vditor)                                                                                              |
+| CSV 文件         | [Papa Parse](https://github.com/mholt/PapaParse)                                                                                            |
+| 3D 模型文件      | [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) + [Three.js](https://github.com/mrdoob/three.js)                              |
+| 思维导图文件     | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer)                                                                       |
+| 压缩文件         | [JSZip](https://github.com/Stuk/jszip)                                                                                                      |
+| CAD 文件(DWG/DXF) | [@mlightcad/cad-simple-viewer](https://github.com/mlightcad/cad-viewer) + [Three.js](https://github.com/mrdoob/three.js)                    |
+| TIFF 图像文件    | [UTIF.js](https://github.com/photopea/UTIF.js) + [pako](https://github.com/nodeca/pako)                                                     |
+| OFD 文件         | [xq-doc-viewer](https://www.npmjs.com/package/xq-doc-viewer)                                                                                |

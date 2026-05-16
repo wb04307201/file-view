@@ -11,6 +11,14 @@
             padding: 0;
             margin: 0;
         }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -19,13 +27,13 @@
     document.addEventListener('DOMContentLoaded', function () {
         const resources = [
             {
-                url: '/static/bpmn-js/18.7.0/assets/bpmn-js.css',
-                cdn: 'https://cdn.jsdelivr.net/npm/bpmn-js/dist/assets/bpmn-js.css',
+                url: '/static/bpmn-js/18.16.1/assets/bpmn-js.css',
+                cdn: 'https://cdn.jsdelivr.net/npm/bpmn-js@18.16.1/dist/assets/bpmn-js.css',
                 type: 'css'
             },
             {
-                url: '/static/bpmn-js/18.7.0/bpmn-viewer.production.min.js',
-                cdn: 'https://cdn.jsdelivr.net/npm/bpmn-js/dist/bpmn-viewer.production.min.js',
+                url: '/static/bpmn-js/18.16.1/bpmn-viewer.production.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/bpmn-js@18.16.1/dist/bpmn-viewer.production.min.js',
                 type: 'js'
             }
         ];
@@ -42,6 +50,11 @@
     function load(){
         const id = getUrlParam('id');
 
+        if (!id) {
+            showError('canvas', '缺少文件 ID');
+            return;
+        }
+
         var bpmnViewer = new BpmnJS({
             container: '#canvas'
         });
@@ -53,12 +66,12 @@
                     bpmnViewer.importXML(xmlContent)
                 } catch (err) {
                     console.error('could not import BPMN 2.0 diagram', err);
-                    alert(err.message);
+                    showError('canvas', err.message);
                 }
             })
             .catch(error => {
                 console.error('could not fetch file content', error);
-                alert(error.message);
+                showError('canvas', error.message);
             });
     }
 </script>

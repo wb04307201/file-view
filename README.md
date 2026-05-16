@@ -4,14 +4,14 @@
   English | <a href="README.zh-CN.md">中文</a>
 </div>
 
-> A lightweight file preview starter component that supports online preview of various document and media formats, featuring a modular architecture that is easy to extend and customize.
+> A lightweight file preview Starter component for Spring Boot 3.x that supports online preview of 20+ file formats (docx/xlsx/pptx/PDF/BPMN/images/videos/code/3D models/CAD, etc.) with a simple Maven dependency.
 
-[![](https://jitpack.io/v/com.gitee.wb04307201/file-view.svg)](https://jitpack.io/#com.gitee.wb04307201/file-view)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.wb04307201/file-view-spring-boot-starter?style=flat-square)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![fork](https://gitee.com/wb04307201/file-view/badge/fork.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![star](https://img.shields.io/github/stars/wb04307201/file-view)](https://github.com/wb04307201/file-view)
 [![fork](https://img.shields.io/github/forks/wb04307201/file-view)](https://github.com/wb04307201/file-view)  
-![MIT](https://img.shields.io/badge/License-Apache2.0-blue.svg) ![JDK](https://img.shields.io/badge/JDK-17+-green.svg) ![SpringBoot](https://img.shields.io/badge/Srping%20Boot-3+-green.svg)
+![MIT](https://img.shields.io/badge/License-Apache2.0-blue.svg) ![JDK](https://img.shields.io/badge/JDK-17+-green.svg) ![SpringBoot](https://img.shields.io/badge/Spring%20Boot-3+-green.svg)
 
 ---
 
@@ -21,8 +21,9 @@
 - Image files
 - Video files
 - Audio files
-- Document files (pdf, ofd, epub)
-- Text/Code files (sh, c, cpp, cs, css, diff, go, graphql, ini, java, js, json, kt, less, lua, mk, m, pl, php, phtml, txt, py, pyrepl, r, rb, rs, scss, sh, sql, swift, ts, vb, wasm, xml, yaml, yml)
+- Document files (pdf, epub, ofd)
+- TIFF image files
+- Text/Code files (c, cpp, cs, css, diff, go, graphql, html, ini, java, js, json, kt, less, lua, m, pl, php, phtml, py, pyrepl, r, rb, rs, scss, sh, sql, swift, ts, vb, wasm, xml, yaml, yml)
 - Markdown documents
 - 3D model files (3dm, 3ds, 3mf, amf, bim, brep, dae, fbx, fcstd, gltf, ifc, iges, step, stl, obj, off, ply, wrl)
 - Mind map files (xmind)
@@ -31,22 +32,12 @@
 
 ## Integration
 
-### Add JitPack Repository
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
 ### Maven Dependency
 ```xml
 <dependency>
-    <groupId>com.gitee.wb04307201.file-view</groupId>
+    <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
 </dependency>
 ```
 
@@ -73,8 +64,6 @@ file:
         enable: true
     xmind:
         enable: true
-    ofd:
-        enable: true
     docx:
         enable: true
     excel:
@@ -87,6 +76,12 @@ file:
         enable: true
     cad:
         enable: true
+    csv:
+        enable: true
+    tiff:
+        enable: true
+    ofd:
+        enable: true
     ## The following are default filename and processor matching rules, no configuration required by default
     strategies:
       - syntaxAndPattern: glob:*.bpmn
@@ -95,11 +90,11 @@ file:
         serviceName: dmn
       - syntaxAndPattern: glob:*.cmmn
         serviceName: cmmn
-      - syntaxAndPattern: glob:*.{sh,c,cpp,cs,css,diff,go,graphql,ini,java,js,json,kt,less,lua,mk,m,pl,php,phtml,html,txt,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
+      - syntaxAndPattern: glob:*.{c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
         serviceName: code
       - syntaxAndPattern: glob:*.epub
         serviceName: epub
-      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,tiff,webp,svg,raw,heic,cr2,nef,orf,sr2}
+      - syntaxAndPattern: glob:*.{jpg,png,bmp,gif,webp,svg,raw,heic,cr2,nef,orf,sr2}
         serviceName: image
       - syntaxAndPattern: glob:*.md
         serviceName: markdown
@@ -107,8 +102,6 @@ file:
         serviceName: pdf
       - syntaxAndPattern: glob:*.xmind
         serviceName: xmind
-      - syntaxAndPattern: glob:*.ofd
-        serviceName: ofd
       - syntaxAndPattern: glob:*.docx
         serviceName: docx
       - syntaxAndPattern: glob:*.{xlsx,xls}
@@ -119,6 +112,12 @@ file:
         serviceName: o3d
       - syntaxAndPattern: glob:*.zip
         serviceName: zip
+      - syntaxAndPattern: glob:*.csv
+        serviceName: csv
+      - syntaxAndPattern: glob:*.{tif,tiff}
+        serviceName: tiff
+      - syntaxAndPattern: glob:*.ofd
+        serviceName: ofd
       - syntaxAndPattern: glob:*.{dwg,dxf}
         serviceName: cad
 ```
@@ -136,7 +135,7 @@ The JS library resources are loaded from jsDelivr. If you cannot get resources f
 <dependency>
     <groupId>com.gitee.wb04307201.file-view</groupId>
     <artifactId>file-view-static</artifactId>
-    <version>1.3.1</version>
+    <version>1.3.3</version>
 </dependency>
 ```
 
@@ -245,12 +244,19 @@ Create page `onlyoffice.html`:
 file:
   view:
     docx:
-        enable: false
+      enable: false
     excel:
-        enable: false
+      enable: false
     pptx:
-        enable: false
+      enable: false
     strategies:
+      - ...
+#      - syntaxAndPattern: glob:*.docx
+#        serviceName: docx
+#      - syntaxAndPattern: glob:*.xlsx
+#        serviceName: excel
+#      - syntaxAndPattern: glob:*.pptx
+#        serviceName: pptx
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
@@ -394,15 +400,19 @@ public class MinioFileStorageImpl implements IFileStorage {
 
 | File Type | Third-party Library |
 |-----------|---------------------|
-| Office files | [vue-office](https://github.com/501351981/vue-office) |
-| Business Process Management files | [bpmn-io](https://github.com/bpmn-io) |
-| Image files | [viewerjs](https://github.com/fengyuanchen/viewerjs) |
-| Document files (pdf) | [pdfobject](https://github.com/pipwerks/PDFObject) |
-| Document files (ofd) | [ofd.js](https://github.com/DLTech21/ofd.js) |
-| Document files (epub) | [epub.js](https://github.com/futurepress/epub.js) |
+| DOCX files | [docx-preview](https://github.com/VolodymyrBaydak/docx-preview) + [JSZip](https://github.com/Stuk/jszip) |
+| XLSX files | [SheetJS](https://github.com/SheetJS/sheetjs) |
+| PPTX files | [pptxviewjs](https://github.com/nicktomach/pptxviewjs) + [Chart.js](https://github.com/chartjs/Chart.js) |
+| Business Process Management files | [bpmn-js](https://github.com/bpmn-io/bpmn-js) / [cmmn-js](https://github.com/bpmn-io/cmmn-js) / [dmn-js](https://github.com/bpmn-io/dmn-js) |
+| Image files | [Viewer.js](https://github.com/fengyuanchen/viewerjs) |
+| Document files (PDF) | [PDFObject](https://github.com/pipwerks/PDFObject) |
+| Document files (EPUB) | [epub.js](https://github.com/futurepress/epub.js) + [JSZip](https://github.com/Stuk/jszip) |
 | Text/Code files | [highlight.js](https://github.com/highlightjs/highlight.js) |
-| Markdown documents | [vditor](https://github.com/Vanessa219/vditor) |
-| 3D model files | [Online3DViewer](https://github.com/kovacsv/Online3DViewer) |
+| Markdown documents | [Vditor](https://github.com/Vanessa219/vditor) |
+| CSV files | [Papa Parse](https://github.com/mholt/PapaParse) |
+| 3D model files | [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) + [Three.js](https://github.com/mrdoob/three.js) |
 | Mind map files | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) |
-| Compressed files | [jszip](https://github.com/Stuk/jszip) |
-| CAD | [CAD-Viewer](https://github.com/mlightcad/cad-viewer) |
+| Compressed files | [JSZip](https://github.com/Stuk/jszip) |
+| CAD files (DWG/DXF) | [@mlightcad/cad-simple-viewer](https://github.com/mlightcad/cad-viewer) + [Three.js](https://github.com/mrdoob/three.js) |
+| TIFF image files | [UTIF.js](https://github.com/photopea/UTIF.js) + [pako](https://github.com/nodeca/pako) |
+| OFD files | [xq-doc-viewer](https://www.npmjs.com/package/xq-doc-viewer) |

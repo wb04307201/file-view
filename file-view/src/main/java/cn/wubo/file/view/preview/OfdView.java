@@ -14,6 +14,6 @@ public class OfdView implements IView {
     @Override
     public ServerResponse handle(ServerRequest request) {
         String id = request.pathVariable("id");
-        return ServerResponse.temporaryRedirect(URI.create(String.format("/?path=ofd&id=%s",id))).build();
+        return ServerResponse.temporaryRedirect(URI.create(String.format("/ofd.html?id=%s", id))).build();
     }
 }

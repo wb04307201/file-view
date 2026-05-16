@@ -14,6 +14,6 @@ public class O3dView implements IView {
     @Override
     public ServerResponse handle(ServerRequest request) {
         String id = request.pathVariable("id");
-        return ServerResponse.temporaryRedirect(URI.create(String.format("/?path=o3d&id=%s",id))).build();
+        return ServerResponse.temporaryRedirect(URI.create(String.format("/o3d.html?id=%s",id))).build();
     }
 }

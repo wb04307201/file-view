@@ -1,4 +1,22 @@
-// 资源加载管理器
+/**
+ * 资源加载管理器
+ *
+ * === 加载策略说明 ===
+ *
+ * 1. ResourceLoader.load(resources) — 并行加载，带 CDN 回退
+ *    适用于资源之间无依赖关系的场景。
+ *    使用页面: bpmn, cmmn, dmn, code, csv, docx, excel, image, markdown,
+ *              o3d, pdf, xmind, zip
+ *
+ * 2. loadSequential(resources) — 顺序加载（在各页面内联定义）
+ *    适用于资源之间有严格依赖顺序的场景（如库 A 依赖库 B）。
+ *    使用页面: pptx (jszip → chart.js → pptxviewjs),
+ *             tiff (pako → utif), epub (jszip → epubjs)
+ *
+ * 3. ES Module importmap — 适用于 ES Module 库
+ *    使用 <script type="importmap"> + <script type="module"> 加载。
+ *    使用页面: ofd (xq-doc-viewer), cad (@mlightcad/cad-simple-viewer)
+ */
 class ResourceLoader {
     static load(resources) {
         const promises = resources.map(res => this.loadResource(res));
@@ -51,4 +69,18 @@ class ResourceLoader {
 function getUrlParam(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
+}
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function showError(containerId, message) {
+    const el = typeof containerId === 'string'
+        ? document.getElementById(containerId)
+        : containerId;
+    if (!el) return;
+    el.innerHTML = '<div class="empty">加载失败: ' + escapeHtml(message) + '</div>';
 }

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Preview</title>
+    <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+        #excel-tabs {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 10px;
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 10px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active {
+            color: #1a73e8;
+            border-bottom-color: #1a73e8;
+        }
+        .tab-btn:hover {
+            background: #f0f0f0;
+        }
+        #excel-container {
+            height: calc(100vh - 42px);
+            overflow: auto;
+            background: #fff;
+        }
+        #excel-container table {
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        #excel-container th, #excel-container td {
+            border: 1px solid #e0e0e0;
+            padding: 4px 8px;
+            text-align: left;
+            min-width: 60px;
+        }
+        #excel-container th {
+            background: #f0f0f0;
+            font-weight: 600;
+        }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="excel-tabs"></div>
+<div id="excel-container"></div>
+<script>
+    let sheetsData = [];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const resources = [
+            {
+                url: '/static/xlsx/0.18.5/xlsx.full.min.js',
+                cdn: 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+                type: 'js'
+            }
+        ];
+
+        ResourceLoader.load(resources)
+            .then(() => {
+                load();
+            })
+            .catch(error => {
+                console.error('SheetJS 资源加载失败:', error);
+            });
+    });
+
+    function load() {
+        const id = getUrlParam('id');
+        const container = document.getElementById('excel-container');
+
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
+
+        fetch(`/wopi/files/${id}/contents`)
+            .then(response => {
+                if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
+                return response.arrayBuffer();
+            })
+            .then(buffer => {
+                const workbook = XLSX.read(buffer, { type: 'array' });
+                sheetsData = workbook.SheetNames.map(name => ({
+                    name,
+                    data: XLSX.utils.sheet_to_json(workbook.Sheets[name], { header: 1, defval: '' })
+                }));
+
+                if (sheetsData.length === 0 || sheetsData[0].data.length === 0) {
+                    container.innerHTML = '<div class="empty">没有数据</div>';
+                    return;
+                }
+
+                renderTabs();
+                showSheet(0);
+            })
+            .catch(error => {
+                console.error('Excel 加载失败:', error);
+                container.innerHTML = `<div class="empty">加载失败: ${escapeHtml(error.message)}</div>`;
+            });
+    }
+
+    function renderTabs() {
+        const tabs = document.getElementById('excel-tabs');
+        tabs.innerHTML = '';
+        sheetsData.forEach((sheet, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+            btn.textContent = sheet.name;
+            btn.onclick = () => showSheet(i);
+            tabs.appendChild(btn);
+        });
+    }
+
+    function showSheet(index) {
+        const container = document.getElementById('excel-container');
+        document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+            btn.className = 'tab-btn' + (i === index ? ' active' : '');
+        });
+
+        const rows = sheetsData[index].data;
+        if (rows.length === 0) {
+            container.innerHTML = '<div class="empty">Sheet 为空</div>';
+            return;
+        }
+
+        let html = '<table><tbody>';
+        rows.forEach((row, ri) => {
+            html += '<tr>';
+            row.forEach(cell => {
+                const tag = ri === 0 ? 'th' : 'td';
+                html += `<${tag}>${escapeHtml(String(cell))}</${tag}>`;
+            });
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    }
+
+</script>
+</body>
+</html>
