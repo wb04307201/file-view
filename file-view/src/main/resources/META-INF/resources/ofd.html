@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OFD Preview</title>
+    <script src="/static/common.js"></script>
     <script type="importmap">
     {
         "imports": {
@@ -92,17 +93,6 @@
 <script type="module">
     import { createViewer } from 'xq-doc-viewer';
 
-    function getUrlParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
-
-    function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
     const id = getUrlParam('id');
     const container = document.getElementById('ofd-container');
 
@@ -123,22 +113,24 @@
                 },
                 onError(err) {
                     console.error('OFD 加载失败:', err);
+                    const msg = err?.message || String(err);
                     const loading = container.querySelector('.loading-overlay');
                     if (loading) {
-                        loading.textContent = `加载失败: ${err.message}`;
+                        loading.textContent = '加载失败: ' + msg;
                     } else {
-                        container.innerHTML = `<div class="loading-overlay">加载失败: ${escapeHtml(err.message)}</div>`;
+                        container.innerHTML = '<div class="loading-overlay">加载失败: ' + escapeHtml(msg) + '</div>';
                     }
                 }
             });
             await viewer.mount();
         } catch (error) {
             console.error('OFD 加载失败:', error);
+            const msg = error?.message || String(error);
             const loading = container.querySelector('.loading-overlay');
             if (loading) {
-                loading.textContent = `加载失败: ${error.message}`;
+                loading.textContent = '加载失败: ' + msg;
             } else {
-                container.innerHTML = `<div class="loading-overlay">加载失败: ${escapeHtml(error.message)}</div>`;
+                container.innerHTML = '<div class="loading-overlay">加载失败: ' + escapeHtml(msg) + '</div>';
             }
         }
     }

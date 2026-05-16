@@ -404,16 +404,19 @@ public class MinioFileStorageImpl implements IFileStorage {
 
 | File Type | Third-party Library |
 |-----------|---------------------|
-| Office files | [vue-office](https://github.com/501351981/vue-office) |
-| Business Process Management files | [bpmn-io](https://github.com/bpmn-io) |
-| Image files | [viewerjs](https://github.com/fengyuanchen/viewerjs) |
-| Document files (pdf) | [pdfobject](https://github.com/pipwerks/PDFObject) |
-| Document files (epub) | [epub.js](https://github.com/futurepress/epub.js) |
+| DOCX files | [docx-preview](https://github.com/VolodymyrBaydak/docx-preview) + [JSZip](https://github.com/Stuk/jszip) |
+| XLSX files | [SheetJS](https://github.com/SheetJS/sheetjs) |
+| PPTX files | [pptxviewjs](https://github.com/nicktomach/pptxviewjs) + [Chart.js](https://github.com/chartjs/Chart.js) |
+| Business Process Management files | [bpmn-js](https://github.com/bpmn-io/bpmn-js) / [cmmn-js](https://github.com/bpmn-io/cmmn-js) / [dmn-js](https://github.com/bpmn-io/dmn-js) |
+| Image files | [Viewer.js](https://github.com/fengyuanchen/viewerjs) |
+| Document files (PDF) | [PDFObject](https://github.com/pipwerks/PDFObject) |
+| Document files (EPUB) | [epub.js](https://github.com/futurepress/epub.js) + [JSZip](https://github.com/Stuk/jszip) |
 | Text/Code files | [highlight.js](https://github.com/highlightjs/highlight.js) |
-| Markdown documents | [vditor](https://github.com/Vanessa219/vditor) |
-| 3D model files | [Online3DViewer](https://github.com/kovacsv/Online3DViewer) |
+| Markdown documents | [Vditor](https://github.com/Vanessa219/vditor) |
+| CSV files | [Papa Parse](https://github.com/mholt/PapaParse) |
+| 3D model files | [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) + [Three.js](https://github.com/mrdoob/three.js) |
 | Mind map files | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) |
-| Compressed files | [jszip](https://github.com/Stuk/jszip) |
-| CAD | [CAD-Viewer](https://github.com/mlightcad/cad-viewer) |
-| TIFF image files | [UTIF.js](https://github.com/photopea/UTIF.js) |
-| OFD files | [ofd.js](https://github.com/lyz810/ofd.js) |
+| Compressed files | [JSZip](https://github.com/Stuk/jszip) |
+| CAD files (DWG/DXF) | [@mlightcad/cad-simple-viewer](https://github.com/mlightcad/cad-viewer) + [Three.js](https://github.com/mrdoob/three.js) |
+| TIFF image files | [UTIF.js](https://github.com/photopea/UTIF.js) + [pako](https://github.com/nodeca/pako) |
+| OFD files | [xq-doc-viewer](https://www.npmjs.com/package/xq-doc-viewer) |

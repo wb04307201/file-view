@@ -5,13 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>epub</title>
     <script src="/static/common.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+        #viewer {
+            height: 85vh;
+            border: none;
+            background: #fff;
+        }
+        #controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+        }
+        #controls button {
+            padding: 6px 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #controls button:hover {
+            background: #f0f0f0;
+        }
+        #controls select {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            max-width: 200px;
+        }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-<div id="viewer" style="height: 90vh; border: 1px solid #ccc;"></div>
-<select id="toc-select"></select>
-<button id="prev">上一页</button>
-<button id="next">下一页</button>
+<div id="viewer"></div>
+<div id="controls">
+    <button id="prev">上一页</button>
+    <select id="toc-select"><option>目录</option></select>
+    <button id="next">下一页</button>
+</div>
 <script>
+    function loadSequential(resources, index) {
+        if (index >= resources.length) return Promise.resolve();
+        const {url, cdn, type} = resources[index];
+        return new Promise((resolve, reject) => {
+            const isCss = type === 'css';
+            const element = document.createElement(isCss ? 'link' : 'script');
+            if (isCss) {
+                element.rel = 'stylesheet';
+                element.href = url;
+            } else {
+                element.src = url;
+                element.async = true;
+            }
+            element.onload = () => {
+                loadSequential(resources, index + 1).then(resolve).catch(reject);
+            };
+            element.onerror = () => {
+                console.warn(`本地资源加载失败，切换CDN: ${cdn}`);
+                element.remove();
+                const cdnElement = document.createElement(isCss ? 'link' : 'script');
+                if (isCss) {
+                    cdnElement.rel = 'stylesheet';
+                    cdnElement.href = cdn;
+                } else {
+                    cdnElement.src = cdn;
+                    cdnElement.async = true;
+                }
+                cdnElement.onload = () => {
+                    loadSequential(resources, index + 1).then(resolve).catch(reject);
+                };
+                cdnElement.onerror = () => reject(`Failed to load ${JSON.stringify({url, cdn, type})}`);
+                document.head.appendChild(cdnElement);
+            };
+            document.head.appendChild(element);
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const resources = [
             {
@@ -26,10 +114,8 @@
             }
         ];
 
-        ResourceLoader.load(resources)
-            .then(() => {
-                load();
-            })
+        loadSequential(resources, 0)
+            .then(() => { load(); })
             .catch(error => {
                 console.error('资源加载失败:', error);
             });
@@ -37,23 +123,33 @@
 
     function load() {
         const id = getUrlParam('id');
-        const book = ePub(`${window.location.origin}/wopi/files/${id}/contents`, {openAs: "epub"})
-        const rendition = book.renderTo("viewer", {width: "100%", height: "100%"});
-        rendition.display();
+        const viewer = document.getElementById('viewer');
 
-        // 翻页按钮
-        book.ready.then(function () {
-            document.getElementById("prev").addEventListener("click", () => rendition.prev());
-            document.getElementById("next").addEventListener("click", () => rendition.next());
-        });
+        if (!id) {
+            viewer.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
 
-        // 绑定目录
-        book.loaded.navigation
-            .then(toc => {
-                const select = document.getElementById("toc-select");
-                toc.forEach(chapter => select.add(new Option(chapter.label, chapter.href)))
-                select.onchange = () => rendition.display(select.value)
-            })
+        try {
+            const book = ePub(`${window.location.origin}/wopi/files/${id}/contents`, {openAs: "epub"});
+            const rendition = book.renderTo("viewer", {width: "100%", height: "100%"});
+            rendition.display();
+
+            book.ready.then(function () {
+                document.getElementById("prev").addEventListener("click", () => rendition.prev());
+                document.getElementById("next").addEventListener("click", () => rendition.next());
+            });
+
+            book.loaded.navigation
+                .then(toc => {
+                    const select = document.getElementById("toc-select");
+                    toc.forEach(chapter => select.add(new Option(chapter.label, chapter.href)));
+                    select.onchange = () => rendition.display(select.value);
+                });
+        } catch (error) {
+            console.error('EPUB 加载失败:', error);
+            showError('viewer', error.message);
+        }
     }
 </script>
 </body>

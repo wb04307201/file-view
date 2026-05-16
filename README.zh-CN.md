@@ -402,18 +402,21 @@ public class MinioFileStorageImpl implements IFileStorage {
 
 ## 使用的第三方库
 
-| 文件类型         | 第三方库                                                                 |
-|------------------|--------------------------------------------------------------------------|
-| office文件       | [vue-office](https://github.com/501351981/vue-office)                |
-| 业务流程管理文件   | [bpmn-io](https://github.com/bpmn-io)                                |
-| 图片文件         | [viewerjs](https://github.com/fengyuanchen/viewerjs)                   |
-| 文档文件(pdf)    | [pdfobject](https://github.com/pipwerks/PDFObject)                     |
-| 文档文件(epub)   | [epub.js](https://github.com/futurepress/epub.js)                     |
-| 文本文件/代码文件 | [highlight.js](https://github.com/highlightjs/highlight.js)             |
-| Markdown文档文件 | [vditor](https://github.com/Vanessa219/vditor)                       |
-| 3D模型文件      | [Online3DViewer](https://github.com/kovacsv/Online3DViewer)           |
-| 思维导图文件     | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer)  |
-| 压缩文件        | [jszip](https://github.com/Stuk/jszip)                               |
-| CAD              | [CAD-Viewer](https://github.com/mlightcad/cad-viewer)                  |
-| TIFF图像文件     | [UTIF.js](https://github.com/photopea/UTIF.js)                         |
-| OFD文件          | [ofd.js](https://github.com/lyz810/ofd.js)                             |
+| 文件类型          | 第三方库                                                                                                                                        |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| DOCX 文件        | [docx-preview](https://github.com/VolodymyrBaydak/docx-preview) + [JSZip](https://github.com/Stuk/jszip)                                    |
+| XLSX 文件        | [SheetJS](https://github.com/SheetJS/sheetjs)                                                                                               |
+| PPTX 文件        | [pptxviewjs](https://github.com/nicktomach/pptxviewjs) + [Chart.js](https://github.com/chartjs/Chart.js)                                    |
+| 业务流程管理文件   | [bpmn-js](https://github.com/bpmn-io/bpmn-js) / [cmmn-js](https://github.com/bpmn-io/cmmn-js) / [dmn-js](https://github.com/bpmn-io/dmn-js) |
+| 图片文件         | [Viewer.js](https://github.com/fengyuanchen/viewerjs)                                                                                       |
+| 文档文件(PDF)    | [PDFObject](https://github.com/pipwerks/PDFObject)                                                                                          |
+| 文档文件(EPUB)   | [epub.js](https://github.com/futurepress/epub.js) + [JSZip](https://github.com/Stuk/jszip)                                                  |
+| 文本文件/代码文件 | [highlight.js](https://github.com/highlightjs/highlight.js)                                                                                 |
+| Markdown文档文件 | [Vditor](https://github.com/Vanessa219/vditor)                                                                                              |
+| CSV 文件         | [Papa Parse](https://github.com/mholt/PapaParse)                                                                                            |
+| 3D 模型文件      | [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) + [Three.js](https://github.com/mrdoob/three.js)                              |
+| 思维导图文件     | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer)                                                                       |
+| 压缩文件         | [JSZip](https://github.com/Stuk/jszip)                                                                                                      |
+| CAD 文件(DWG/DXF) | [@mlightcad/cad-simple-viewer](https://github.com/mlightcad/cad-viewer) + [Three.js](https://github.com/mrdoob/three.js)                    |
+| TIFF 图像文件    | [UTIF.js](https://github.com/photopea/UTIF.js) + [pako](https://github.com/nodeca/pako)                                                     |
+| OFD 文件         | [xq-doc-viewer](https://www.npmjs.com/package/xq-doc-viewer)                                                                                |

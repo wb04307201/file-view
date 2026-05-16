@@ -201,19 +201,8 @@
             renderPage(0);
         } catch (error) {
             console.error('TIFF 加载失败:', error);
-            showError(error.message);
+            showError('tiff-container', error.message);
         }
-    }
-
-    function showError(msg) {
-        const container = document.getElementById('tiff-container');
-        container.innerHTML = `<div class="empty">加载失败: ${escapeHtml(msg)}</div>`;
-    }
-
-    function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
     }
 </script>
 </body>

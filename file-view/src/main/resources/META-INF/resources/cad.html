@@ -33,6 +33,7 @@
             font-size: 14px;
         }
     </style>
+    <script src="/static/common.js"></script>
     <script type="importmap">
     {
         "imports": {
@@ -53,17 +54,6 @@
 </div>
 <script type="module">
     import { AcApDocManager } from '@mlightcad/cad-simple-viewer';
-
-    function getUrlParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
-
-    function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
 
     const id = getUrlParam('id');
     const container = document.getElementById('cad-container');
@@ -95,7 +85,6 @@
                     mtextRender: '/static/cad-workers/mtext-renderer-worker.js'
                 }
             });
-            await AcApDocManager.instance.loadDefaultFonts();
 
             const success = await AcApDocManager.instance.openDocument(file.BaseFileName, arrayBuffer, {
                 minimumChunkSize: 1000,
@@ -105,11 +94,13 @@
                 throw new Error('文档打开失败');
             }
 
+            await AcApDocManager.instance.loadDefaultFonts();
+
             loading.remove();
 
         } catch (error) {
             console.error('CAD 加载失败:', error);
-            container.innerHTML = `<div class="empty">加载失败: ${escapeHtml(error.message)}</div>`;
+            container.innerHTML = '<div class="empty">加载失败: ' + escapeHtml(error.message) + '</div>';
         }
     }
 </script>

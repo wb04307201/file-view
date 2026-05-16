@@ -10,11 +10,29 @@
             height: 100%;
             padding: 0;
             margin: 0;
+            background: #f5f5f5;
+        }
+        pre {
+            margin: 0;
+            padding: 20px;
+            overflow: auto;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-<pre><code id="code"></code></pre>
+<div id="code-container">
+    <pre><code id="code"></code></pre>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -42,16 +60,25 @@
 
     function load() {
         const id = getUrlParam('id');
+        const container = document.getElementById('code-container');
+
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
 
         fetch(`/wopi/files/${id}/contents`)
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
+                return response.text();
+            })
             .then(text => {
                 document.getElementById("code").textContent = text;
                 hljs.highlightAll();
             })
             .catch(error => {
                 console.error('could not fetch file content', error);
-                alert(error.message);
+                showError('code-container', error.message);
             });
     }
 </script>

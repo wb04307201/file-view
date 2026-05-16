@@ -51,7 +51,7 @@
             }
         ];
 
-        ResourceLoader.load(resources)
+        loadSequential(resources)
             .then(() => {
                 load();
             })
@@ -59,6 +59,39 @@
                 console.error('docx-preview 资源加载失败:', error);
             });
     });
+
+    function loadSequential(resources, index = 0) {
+        return new Promise((resolve, reject) => {
+            if (index >= resources.length) {
+                resolve();
+                return;
+            }
+            const {url, cdn, type} = resources[index];
+            const element = document.createElement(type === 'css' ? 'link' : 'script');
+            if (type === 'css') {
+                element.rel = 'stylesheet';
+                element.href = url;
+            } else {
+                element.src = url;
+            }
+            element.onload = () => loadSequential(resources, index + 1).then(resolve).catch(reject);
+            element.onerror = () => {
+                console.warn(`本地资源加载失败，切换CDN: ${cdn}`);
+                element.remove();
+                const cdnElement = document.createElement(type === 'css' ? 'link' : 'script');
+                if (type === 'css') {
+                    cdnElement.rel = 'stylesheet';
+                    cdnElement.href = cdn;
+                } else {
+                    cdnElement.src = cdn;
+                }
+                cdnElement.onload = () => loadSequential(resources, index + 1).then(resolve).catch(reject);
+                cdnElement.onerror = () => reject(`Failed to load ${url}`);
+                document.head.appendChild(cdnElement);
+            };
+            document.head.appendChild(element);
+        });
+    }
 
     function load() {
         const id = getUrlParam('id');
@@ -92,11 +125,6 @@
             });
     }
 
-    function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
 </script>
 </body>
 </html>

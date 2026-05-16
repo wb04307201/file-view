@@ -11,8 +11,14 @@
             padding: 0;
             margin: 0;
         }
-
-        .pdfobject-container { height: 500px; border: 1px solid #ccc; }
+        .empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -38,8 +44,19 @@
 
     function load(){
         const id = getUrlParam('id');
+        const container = document.getElementById('my-pdf');
 
-        PDFObject.embed(`/wopi/files/${id}/contents`, "#my-pdf");
+        if (!id) {
+            container.innerHTML = '<div class="empty">缺少文件 ID</div>';
+            return;
+        }
+
+        try {
+            PDFObject.embed(`/wopi/files/${id}/contents`, "#my-pdf");
+        } catch (error) {
+            console.error('PDF 加载失败:', error);
+            showError('my-pdf', error.message);
+        }
     }
 </script>
 </body>
