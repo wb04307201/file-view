@@ -4,7 +4,7 @@
   <a href="README.md">English</a> | 中文
 </div>
 
-> 一个轻量级文件预览的starter组件，支持多种文档和媒体格式的在线预览，采用模块化架构，易于扩展和定制。
+> 一个 Spring Boot 3.x 的轻量级文件在线预览 Starter 组件，通过简单的 Maven 依赖引入即可为项目提供 docx/xlsx/pptx/PDF/BPMN/图片/视频/代码/3D 模型/CAD 等 20+ 种文件格式的在线预览能力。
 
 [![](https://jitpack.io/v/com.gitee.wb04307201/file-view.svg)](https://jitpack.io/#com.gitee.wb04307201/file-view)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)

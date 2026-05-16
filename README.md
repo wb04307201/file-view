@@ -4,7 +4,7 @@
   English | <a href="README.zh-CN.md">中文</a>
 </div>
 
-> A lightweight file preview starter component that supports online preview of various document and media formats, featuring a modular architecture that is easy to extend and customize.
+> A lightweight file preview Starter component for Spring Boot 3.x that supports online preview of 20+ file formats (docx/xlsx/pptx/PDF/BPMN/images/videos/code/3D models/CAD, etc.) with a simple Maven dependency.
 
 [![](https://jitpack.io/v/com.gitee.wb04307201/file-view.svg)](https://jitpack.io/#com.gitee.wb04307201/file-view)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
