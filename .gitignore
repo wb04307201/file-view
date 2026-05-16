@@ -34,3 +34,4 @@ build/
 /测试用/
 /.claude/
 /.playwright-mcp/
+/file-view-test/temp/
