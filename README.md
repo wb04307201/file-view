@@ -32,20 +32,10 @@
 
 ## Integration
 
-### Add JitPack Repository
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
 ### Maven Dependency
 ```xml
 <dependency>
-    <groupId>com.gitee.wb04307201.file-view</groupId>
+    <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
     <version>1.3.3</version>
 </dependency>
