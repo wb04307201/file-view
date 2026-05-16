@@ -260,6 +260,7 @@ file:
     pptx:
         enable: false
     strategies:
+      - ...
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
