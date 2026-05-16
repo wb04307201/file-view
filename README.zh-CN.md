@@ -133,7 +133,7 @@ file:
 使用的js库资源从jsDelivr加载，如无法从jsDelivr获取资源，可以添加`file-view-static`将js库本地化
 ```xml
 <dependency>
-    <groupId>com.gitee.wb04307201.file-view</groupId>
+    <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-static</artifactId>
     <version>1.3.3</version>
 </dependency>

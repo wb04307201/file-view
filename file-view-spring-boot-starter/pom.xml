@@ -12,7 +12,7 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.gitee.wb04307201</groupId>
+            <groupId>io.github.wb04307201</groupId>
             <artifactId>file-view-spring-boot-autoconfigure</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
