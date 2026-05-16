@@ -6,7 +6,7 @@
 
 > A lightweight file preview Starter component for Spring Boot 3.x that supports online preview of 20+ file formats (docx/xlsx/pptx/PDF/BPMN/images/videos/code/3D models/CAD, etc.) with a simple Maven dependency.
 
-[![](https://jitpack.io/v/com.gitee.wb04307201/file-view.svg)](https://jitpack.io/#com.gitee.wb04307201/file-view)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.wb04307201/file-view-spring-boot-starter?style=flat-square)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![fork](https://gitee.com/wb04307201/file-view/badge/fork.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
 [![star](https://img.shields.io/github/stars/wb04307201/file-view)](https://github.com/wb04307201/file-view)
