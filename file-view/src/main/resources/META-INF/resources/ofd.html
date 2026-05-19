@@ -99,6 +99,7 @@
     if (!id) {
         container.innerHTML = '<div class="loading-overlay">缺少文件 ID</div>';
     } else {
+        injectDownloadButton(id);
         try {
             const viewer = createViewer({
                 target: '#ofd-container',

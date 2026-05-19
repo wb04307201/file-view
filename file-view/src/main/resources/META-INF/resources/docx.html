@@ -102,6 +102,8 @@
             return;
         }
 
+        injectDownloadButton(id);
+
         fetch(`/wopi/files/${id}/contents`)
             .then(response => {
                 if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');

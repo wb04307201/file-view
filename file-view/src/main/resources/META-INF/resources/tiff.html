@@ -170,6 +170,8 @@
             if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
             const buffer = await response.arrayBuffer();
 
+            injectDownloadButton(id);
+
             if (typeof UTIF === 'undefined') {
                 container.innerHTML = '<div class="empty">UTIF.js 未正确加载</div>';
                 return;

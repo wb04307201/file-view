@@ -37,7 +37,7 @@
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.3.3</version>
+    <version>1.3.4</version>
 </dependency>
 ```
 
@@ -142,7 +142,8 @@ The JS library resources are loaded from jsDelivr. If you cannot get resources f
 ### Access Built-in Interface for File Upload and Preview
 Visit `http://localhost:8080/file/view`  
 ![img.png](img.png)  
-![gif.gif](gif.gif)
+![gif.gif](gif.gif)  
+> All preview pages include a floating download button in the top-right corner. Hover near the corner to reveal it, then click to download the original file.
 
 ### Preview Extension
 The following uses OnlyOffice as an example to illustrate how to extend previews:
