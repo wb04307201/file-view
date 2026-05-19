@@ -15,7 +15,7 @@ public class FileStorageInfo implements Serializable {
     @JsonProperty("BaseFileName")
     private String baseFileName;
     @JsonProperty("Size")
-    private int size;
+    private long size;
     private String mimeType;
     private String location;
     @JsonProperty("Version")
