@@ -80,13 +80,16 @@
             return;
         }
 
+        injectDownloadButton(id);
+
         fetch(`/wopi/files/${id}/contents`)
             .then(response => {
                 if (!response.ok) throw new Error('文件内容获取失败 (HTTP ' + response.status + ')');
                 return response.text();
             })
             .then(text => {
-                if (!text.trim()) {
+                injectDownloadButton(id);
+            if (!text.trim()) {
                     container.innerHTML = '<div class="empty">文件为空</div>';
                     return;
                 }

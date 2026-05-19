@@ -60,6 +60,8 @@
             return;
         }
 
+        injectDownloadButton(id);
+
         if (typeof OV === 'undefined') {
             parentDiv.innerHTML = '<div class="empty">3D viewer 未正确加载</div>';
             return;

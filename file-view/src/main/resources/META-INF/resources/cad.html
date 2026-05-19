@@ -66,6 +66,7 @@
     }
 
     async function load() {
+        injectDownloadButton(id);
         try {
             const fileResp = await fetch(`/wopi/files/${id}`);
             if (!fileResp.ok) throw new Error('文件信息获取失败 (HTTP ' + fileResp.status + ')');

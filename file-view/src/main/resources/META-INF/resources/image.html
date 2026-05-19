@@ -66,6 +66,8 @@
             return;
         }
 
+        injectDownloadButton(id);
+
         fetch(`/wopi/files/${id}`)
             .then(response => response.json())
             .then(data => {

@@ -130,6 +130,8 @@
             return;
         }
 
+        injectDownloadButton(id);
+
         try {
             const book = ePub(`${window.location.origin}/wopi/files/${id}/contents`, {openAs: "epub"});
             const rendition = book.renderTo("viewer", {width: "100%", height: "100%"});

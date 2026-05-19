@@ -84,3 +84,125 @@ function showError(containerId, message) {
     if (!el) return;
     el.innerHTML = '<div class="empty">加载失败: ' + escapeHtml(message) + '</div>';
 }
+
+/**
+ * 在页面右上角注入一个悬浮下载按钮。
+ * 默认极低透明度，hover 时完全显示，点击后获取原始文件名并触发下载。
+ * @param {string} id - 文件 ID
+ */
+function injectDownloadButton(id) {
+    if (!id) return;
+
+    // 防止重复注入
+    if (document.getElementById('__download-btn__')) return;
+
+    // 创建按钮元素
+    const btn = document.createElement('button');
+    btn.id = '__download-btn__';
+    btn.type = 'button';
+    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+    btn.title = '下载文件';
+
+    // 插入样式（全局仅一次）
+    if (!document.getElementById('__download-btn-style__')) {
+        const style = document.createElement('style');
+        style.id = '__download-btn-style__';
+        style.textContent = `
+            #__download-btn__ {
+                position: fixed;
+                top: 16px;
+                right: 16px;
+                z-index: 99999;
+                width: 44px;
+                height: 44px;
+                border: none;
+                border-radius: 8px;
+                background: rgba(0, 0, 0, 0.35);
+                color: #fff;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.3s ease, background 0.2s ease, transform 0.2s ease;
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+            }
+            #__download-btn__:hover {
+                background: rgba(0, 0, 0, 0.7);
+                transform: scale(1.05);
+            }
+            /* 鼠标靠近右上角时淡入 */
+            #__download-btn__.show {
+                opacity: 0.6;
+            }
+            #__download-btn__:hover,
+            #__download-btn__.active {
+                opacity: 1 !important;
+            }
+            #__download-btn__ svg {
+                pointer-events: none;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(btn);
+
+    // 鼠标靠近右上角时显示按钮
+    const showZone = () => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientX > w - 120 && e.clientY < 120) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        });
+    };
+    showZone();
+
+    // 点击触发下载
+    btn.addEventListener('click', () => {
+        btn.classList.add('active');
+        btn.title = '正在获取...';
+        btn.style.pointerEvents = 'none';
+
+        // 先获取文件元信息拿到原始文件名
+        fetch(`/wopi/files/${id}`)
+            .then(res => {
+                if (!res.ok) throw new Error('获取文件信息失败');
+                return res.json();
+            })
+            .then(info => {
+                const filename = info.BaseFileName || info.filename || `file-${id}`;
+                btn.title = `正在下载: ${filename}`;
+
+                return fetch(`/wopi/files/${id}/contents`)
+                    .then(res => {
+                        if (!res.ok) throw new Error('获取文件内容失败');
+                        return res.blob();
+                    })
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    });
+            })
+            .catch(err => {
+                console.error('下载失败:', err);
+                btn.title = '下载失败';
+            })
+            .finally(() => {
+                btn.classList.remove('active');
+                btn.title = '下载文件';
+                btn.style.pointerEvents = '';
+            });
+    });
+}

@@ -135,7 +135,7 @@ file:
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-static</artifactId>
-    <version>1.3.3</version>
+    <version>1.3.4</version>
 </dependency>
 ```
 
@@ -143,6 +143,8 @@ file:
 访问 `http://localhost:8080/file/view`  
 ![img.png](img.png)  
 ![gif.gif](gif.gif)
+> 所有预览页面右上角均内置悬浮下载按钮，鼠标靠近时淡入显示，点击即可下载原始文件。
+
 
 ### 预览扩展
 下面以OnlyOffice为例说明如何扩展预览：

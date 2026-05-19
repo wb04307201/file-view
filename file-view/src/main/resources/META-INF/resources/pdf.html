@@ -51,6 +51,8 @@
             return;
         }
 
+        injectDownloadButton(id);
+
         try {
             PDFObject.embed(`/wopi/files/${id}/contents`, "#my-pdf");
         } catch (error) {
