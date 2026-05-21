@@ -7,7 +7,7 @@ import org.springframework.web.servlet.function.ServerResponse;
 
 import java.net.URI;
 
-@Service
+//@Service
 public class OnlyOfficeView implements IView {
     @Override
     public String getServiceName() {
