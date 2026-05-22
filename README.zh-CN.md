@@ -43,7 +43,7 @@
 ---
 
 ## 支持的文件类型
-- office文件(docx,xlsx,xls,pptx)
+- office文件(docx,xlsx,pptx)
 - 业务流程管理文件(bpmn,dmn,cmmn)
 - 图片文件
 - 视频文件
