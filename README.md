@@ -43,7 +43,7 @@
 ---
 
 ## Supported File Types
-- Office files (docx, xlsx, xls, pptx)
+- Office files (docx, xlsx, pptx)
 - Business Process Management files (bpmn, dmn, cmmn)
 - Image files
 - Video files
