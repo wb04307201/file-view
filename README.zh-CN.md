@@ -15,6 +15,33 @@
 
 ---
 
+## 版本说明
+
+> **1.4.0 及更高版本**：基于 JDK 25 + Spring Boot 4.x
+> **1.4.0-sb3**：基于 JDK 17 + Spring Boot 3.x（当前分支）
+
+### Maven 依赖
+
+#### JDK 25 + Spring Boot 4.x（推荐）
+```xml
+<dependency>
+    <groupId>io.github.wb04307201</groupId>
+    <artifactId>file-view-spring-boot-starter</artifactId>
+    <version>1.4.0</version>
+</dependency>
+```
+
+#### JDK 17 + Spring Boot 3.x
+```xml
+<dependency>
+    <groupId>io.github.wb04307201</groupId>
+    <artifactId>file-view-spring-boot-starter</artifactId>
+    <version>1.4.0-sb3</version>
+</dependency>
+```
+
+---
+
 ## 支持的文件类型
 - office文件(docx,xlsx,xls,pptx)
 - 业务流程管理文件(bpmn,dmn,cmmn)
