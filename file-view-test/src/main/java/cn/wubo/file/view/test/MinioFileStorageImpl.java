@@ -34,7 +34,7 @@ public class MinioFileStorageImpl implements IFileStorage {
     public MinioFileStorageImpl() {
         this.minioClient = new MinioClient.Builder()
                 .endpoint("http://127.0.0.1:9000")
-                .credentials("ROOTUSER", "12345678")
+                .credentials("ROOTUSER", "CHANGEME123")
                 .build();
     }
 

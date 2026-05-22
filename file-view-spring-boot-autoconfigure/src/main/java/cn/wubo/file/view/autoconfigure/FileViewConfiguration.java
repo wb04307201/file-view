@@ -22,6 +22,7 @@ import org.springframework.web.servlet.function.ServerResponse;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,16 +163,20 @@ public class FileViewConfiguration {
         }
         if (properties.getApi().isEnabledUpload()) {
             builder.POST("/file/view/upload", request -> {
-                Part part = request.multipartData().getFirst("file");
-                if (part == null) {
+                List<Part> parts = request.multipartData().get("file");
+                if (parts == null || parts.isEmpty()) {
                     throw new FileUploadException("Required file part 'file' is missing in multipart request");
                 }
-                try (InputStream is = part.getInputStream()) {
-                    String rawFileName = part.getSubmittedFileName();
-                    return ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .body(storage.upload(rawFileName, is.readAllBytes(), part.getContentType()));
+                List<FileStorageInfo> results = new ArrayList<>();
+                for (Part part : parts) {
+                    try (InputStream is = part.getInputStream()) {
+                        String rawFileName = part.getSubmittedFileName();
+                        results.add(storage.upload(rawFileName, is.readAllBytes(), part.getContentType()));
+                    }
                 }
+                return ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(results);
             });
         }
         if (properties.getApi().isEnabledList()) {

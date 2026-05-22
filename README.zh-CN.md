@@ -43,14 +43,14 @@
 ---
 
 ## 支持的文件类型
-- office文件(docx,xlsx,xls,pptx)
+- office文件(docx,xlsx,pptx)
 - 业务流程管理文件(bpmn,dmn,cmmn)
 - 图片文件
 - 视频文件
 - 音频文件
 - 文档文件(pdf,epub,ofd)
 - TIFF图像文件
-- 文本文件/代码文件(c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml)
+- 文本文件/代码文件(c, cpp, cs, css, diff, go, graphql, html, ini, java, js, json, kt, less, lua, m, mk, pl, php, phtml, py, pyrepl, r, rb, rs, scss, sh, sql, swift, ts, vb, wasm, xml, yaml, yml)
 - Markdown文档文件
 - 3D模型文件(3dm,3ds,3mf,amf,bim,brep,dae,fbx,fcstd,gltf,ifc,iges,step,stl,obj,off,ply,wrl)
 - 思维导图文件(xmind)
@@ -74,41 +74,41 @@ file:
   view:
     ## 以下为默认的处理器,默认无需配置
     bpmn:
-        enable: true
+      enable: true
     dmn:
-        enable: true
+      enable: true
     cmmn:
-        enable: true
+      enable: true
     code:
-        enable: true
+      enable: true
     epub:
-        enable: true
+      enable: true
     image:
-        enable: true
+      enable: true
     markdown:
-        enable: true
+      enable: true
     pdf:
-        enable: true
+      enable: true
     xmind:
-        enable: true
+      enable: true
     docx:
-        enable: true
+      enable: true
     excel:
-        enable: true
+      enable: true
     pptx:
-        enable: true
+      enable: true
     o3d:
-        enable: true
+      enable: true
     zip:
-        enable: true
+      enable: true
     cad:
-        enable: true
+      enable: true
     csv:
-        enable: true
+      enable: true
     tiff:
-        enable: true
+      enable: true
     ofd:
-        enable: true
+      enable: true
     ## 以下为默认的文件名和处理器匹配规则,默认无需配置
     strategies:
       - syntaxAndPattern: glob:*.bpmn
@@ -117,7 +117,7 @@ file:
         serviceName: dmn
       - syntaxAndPattern: glob:*.cmmn
         serviceName: cmmn
-      - syntaxAndPattern: glob:*.{c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
+      - syntaxAndPattern: glob:*.{c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,mk,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
         serviceName: code
       - syntaxAndPattern: glob:*.epub
         serviceName: epub
@@ -167,11 +167,21 @@ file:
 ```
 
 ### 访问内置界面进行文件上传和预览
-访问 `http://localhost:8080/file/view`  
-![img.png](img.png)  
+访问 `http://localhost:8080/file/view`
+![img.png](img.png)
 ![gif.gif](gif.gif)
 > 所有预览页面右上角均内置悬浮下载按钮，鼠标靠近时淡入显示，点击即可下载原始文件。
 
+### REST API
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/file/view/upload` | 上传文件（支持多文件上传，返回 `List<FileStorageInfo>` 数组） |
+| GET | `/file/view/list` | 获取已上传的文件列表 |
+| GET | `/file/view/{id}` | 预览指定 ID 的文件 |
+| POST | `/file/view/deleteById` | 删除指定 ID 的文件（请求体 JSON：`{"id": "文件ID"}`） |
+| GET | `/wopi/files/{id}` | WOPI 接口：获取文件元信息 |
+| GET | `/wopi/files/{id}/contents` | WOPI 接口：获取文件内容 |
 
 ### 预览扩展
 下面以OnlyOffice为例说明如何扩展预览：
@@ -250,7 +260,7 @@ public class OnlyOfficeView implements IView {
                         "fileType": `${fileType}`,
                         "key": `${data.id}`,
                         "title": `${fileName}`,
-                        "url": `http://192.168.31.197:8080/wopi/files/${data.id}/contents`,
+                        "url": `${window.location.origin}/wopi/files/${data.id}/contents`,
                     },
                     "editorConfig": {
                         "mode": "view",
@@ -273,19 +283,19 @@ public class OnlyOfficeView implements IView {
 file:
   view:
     docx:
-        enable: false
+      enable: false
     excel:
-        enable: false
+      enable: false
     pptx:
-        enable: false
+      enable: false
     strategies:
       - ...
-#      - syntaxAndPattern: glob:*.docx
-#        serviceName: docx
-#      - syntaxAndPattern: glob:*.xlsx
-#        serviceName: excel
-#      - syntaxAndPattern: glob:*.pptx
-#        serviceName: pptx
+    #      - syntaxAndPattern: glob:*.docx
+    #        serviceName: docx
+    #      - syntaxAndPattern: glob:*.xlsx
+    #        serviceName: excel
+    #      - syntaxAndPattern: glob:*.pptx
+    #        serviceName: pptx
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
@@ -346,7 +356,7 @@ public class MinioFileStorageImpl implements IFileStorage {
     public MinioFileStorageImpl() {
         this.minioClient = new MinioClient.Builder()
                 .endpoint("http://127.0.0.1:9000")
-                .credentials("ROOTUSER", "12345678")
+                .credentials("ROOTUSER", "CHANGEME123")
                 .build();
     }
 
@@ -427,21 +437,21 @@ public class MinioFileStorageImpl implements IFileStorage {
 
 ## 使用的第三方库
 
-| 文件类型          | 第三方库                                                                                                                                        |
-|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| DOCX 文件        | [docx-preview](https://github.com/VolodymyrBaydak/docx-preview) + [JSZip](https://github.com/Stuk/jszip)                                    |
-| XLSX 文件        | [SheetJS](https://github.com/SheetJS/sheetjs)                                                                                               |
-| PPTX 文件        | [pptxviewjs](https://github.com/nicktomach/pptxviewjs) + [Chart.js](https://github.com/chartjs/Chart.js)                                    |
-| 业务流程管理文件   | [bpmn-js](https://github.com/bpmn-io/bpmn-js) / [cmmn-js](https://github.com/bpmn-io/cmmn-js) / [dmn-js](https://github.com/bpmn-io/dmn-js) |
-| 图片文件         | [Viewer.js](https://github.com/fengyuanchen/viewerjs)                                                                                       |
-| 文档文件(PDF)    | [PDFObject](https://github.com/pipwerks/PDFObject)                                                                                          |
-| 文档文件(EPUB)   | [epub.js](https://github.com/futurepress/epub.js) + [JSZip](https://github.com/Stuk/jszip)                                                  |
-| 文本文件/代码文件 | [highlight.js](https://github.com/highlightjs/highlight.js)                                                                                 |
-| Markdown文档文件 | [Vditor](https://github.com/Vanessa219/vditor)                                                                                              |
-| CSV 文件         | [Papa Parse](https://github.com/mholt/PapaParse)                                                                                            |
-| 3D 模型文件      | [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) + [Three.js](https://github.com/mrdoob/three.js)                              |
-| 思维导图文件     | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer)                                                                       |
-| 压缩文件         | [JSZip](https://github.com/Stuk/jszip)                                                                                                      |
-| CAD 文件(DWG/DXF) | [@mlightcad/cad-simple-viewer](https://github.com/mlightcad/cad-viewer) + [Three.js](https://github.com/mrdoob/three.js)                    |
-| TIFF 图像文件    | [UTIF.js](https://github.com/photopea/UTIF.js) + [pako](https://github.com/nodeca/pako)                                                     |
-| OFD 文件         | [xq-doc-viewer](https://www.npmjs.com/package/xq-doc-viewer)                                                                                |
+| 文件类型 | 第三方库 |
+|----------|----------|
+| DOCX 文件 | [docx-preview](https://github.com/VolodymyrBaydak/docx-preview) + [JSZip](https://github.com/Stuk/jszip) |
+| XLSX 文件 | [SheetJS](https://github.com/SheetJS/sheetjs) |
+| PPTX 文件 | [pptxviewjs](https://github.com/nicktomach/pptxviewjs) + [Chart.js](https://github.com/chartjs/Chart.js) |
+| 业务流程管理文件 | [bpmn-js](https://github.com/bpmn-io/bpmn-js) / [cmmn-js](https://github.com/bpmn-io/cmmn-js) / [dmn-js](https://github.com/bpmn-io/dmn-js) |
+| 图片文件 | [Viewer.js](https://github.com/fengyuanchen/viewerjs) |
+| 文档文件(PDF) | [PDFObject](https://github.com/pipwerks/PDFObject) |
+| 文档文件(EPUB) | [epub.js](https://github.com/futurepress/epub.js) + [JSZip](https://github.com/Stuk/jszip) |
+| 文本文件/代码文件 | [highlight.js](https://github.com/highlightjs/highlight.js) |
+| Markdown文档文件 | [Vditor](https://github.com/Vanessa219/vditor) |
+| CSV 文件 | [Papa Parse](https://github.com/mholt/PapaParse) |
+| 3D 模型文件 | [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) + [Three.js](https://github.com/mrdoob/three.js) |
+| 思维导图文件 | [xmind-embed-viewer](https://github.com/xmindltd/xmind-embed-viewer) |
+| 压缩文件 | [JSZip](https://github.com/Stuk/jszip) |
+| CAD 文件(DWG/DXF) | [@mlightcad/cad-simple-viewer](https://github.com/mlightcad/cad-viewer) + [Three.js](https://github.com/mrdoob/three.js) |
+| TIFF 图像文件 | [UTIF.js](https://github.com/photopea/UTIF.js) + [pako](https://github.com/nodeca/pako) |
+| OFD 文件 | [xq-doc-viewer](https://www.npmjs.com/package/xq-doc-viewer) |

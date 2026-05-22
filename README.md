@@ -43,14 +43,14 @@
 ---
 
 ## Supported File Types
-- Office files (docx, xlsx, xls, pptx)
+- Office files (docx, xlsx, pptx)
 - Business Process Management files (bpmn, dmn, cmmn)
 - Image files
 - Video files
 - Audio files
 - Document files (pdf, epub, ofd)
 - TIFF image files
-- Text/Code files (c, cpp, cs, css, diff, go, graphql, html, ini, java, js, json, kt, less, lua, m, pl, php, phtml, py, pyrepl, r, rb, rs, scss, sh, sql, swift, ts, vb, wasm, xml, yaml, yml)
+- Text/Code files (c, cpp, cs, css, diff, go, graphql, html, ini, java, js, json, kt, less, lua, m, mk, pl, php, phtml, py, pyrepl, r, rb, rs, scss, sh, sql, swift, ts, vb, wasm, xml, yaml, yml)
 - Markdown documents
 - 3D model files (3dm, 3ds, 3mf, amf, bim, brep, dae, fbx, fcstd, gltf, ifc, iges, step, stl, obj, off, ply, wrl)
 - Mind map files (xmind)
@@ -74,41 +74,41 @@ file:
   view:
     ## The following are default processors, no configuration required by default
     bpmn:
-        enable: true
+      enable: true
     dmn:
-        enable: true
+      enable: true
     cmmn:
-        enable: true
+      enable: true
     code:
-        enable: true
+      enable: true
     epub:
-        enable: true
+      enable: true
     image:
-        enable: true
+      enable: true
     markdown:
-        enable: true
+      enable: true
     pdf:
-        enable: true
+      enable: true
     xmind:
-        enable: true
+      enable: true
     docx:
-        enable: true
+      enable: true
     excel:
-        enable: true
+      enable: true
     pptx:
-        enable: true
+      enable: true
     o3d:
-        enable: true
+      enable: true
     zip:
-        enable: true
+      enable: true
     cad:
-        enable: true
+      enable: true
     csv:
-        enable: true
+      enable: true
     tiff:
-        enable: true
+      enable: true
     ofd:
-        enable: true
+      enable: true
     ## The following are default filename and processor matching rules, no configuration required by default
     strategies:
       - syntaxAndPattern: glob:*.bpmn
@@ -117,7 +117,7 @@ file:
         serviceName: dmn
       - syntaxAndPattern: glob:*.cmmn
         serviceName: cmmn
-      - syntaxAndPattern: glob:*.{c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
+      - syntaxAndPattern: glob:*.{c,cpp,cs,css,diff,go,graphql,html,ini,java,js,json,kt,less,lua,m,mk,pl,php,phtml,py,pyrepl,r,rb,rs,scss,sh,sql,swift,ts,vb,wasm,xml,yaml,yml}
         serviceName: code
       - syntaxAndPattern: glob:*.epub
         serviceName: epub
@@ -167,10 +167,21 @@ The JS library resources are loaded from jsDelivr. If you cannot get resources f
 ```
 
 ### Access Built-in Interface for File Upload and Preview
-Visit `http://localhost:8080/file/view`  
-![img.png](img.png)  
-![gif.gif](gif.gif)  
+Visit `http://localhost:8080/file/view`
+![img.png](img.png)
+![gif.gif](gif.gif)
 > All preview pages include a floating download button in the top-right corner. Hover near the corner to reveal it, then click to download the original file.
+
+### REST API
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/file/view/upload` | Upload file (supports multiple files, returns `List<FileStorageInfo>` array) |
+| GET | `/file/view/list` | Get list of uploaded files |
+| GET | `/file/view/{id}` | Preview file by ID |
+| POST | `/file/view/deleteById` | Delete file by ID (request body JSON: `{"id": "fileId"}`) |
+| GET | `/wopi/files/{id}` | WOPI endpoint: get file metadata |
+| GET | `/wopi/files/{id}/contents` | WOPI endpoint: get file content |
 
 ### Preview Extension
 The following uses OnlyOffice as an example to illustrate how to extend previews:
@@ -249,7 +260,7 @@ Create page `onlyoffice.html`:
                         "fileType": `${fileType}`,
                         "key": `${data.id}`,
                         "title": `${fileName}`,
-                        "url": `http://192.168.31.197:8080/wopi/files/${data.id}/contents`,
+                        "url": `${window.location.origin}/wopi/files/${data.id}/contents`,
                     },
                     "editorConfig": {
                         "mode": "view",
@@ -279,12 +290,12 @@ file:
       enable: false
     strategies:
       - ...
-#      - syntaxAndPattern: glob:*.docx
-#        serviceName: docx
-#      - syntaxAndPattern: glob:*.xlsx
-#        serviceName: excel
-#      - syntaxAndPattern: glob:*.pptx
-#        serviceName: pptx
+    #      - syntaxAndPattern: glob:*.docx
+    #        serviceName: docx
+    #      - syntaxAndPattern: glob:*.xlsx
+    #        serviceName: excel
+    #      - syntaxAndPattern: glob:*.pptx
+    #        serviceName: pptx
       - syntaxAndPattern: glob:*.{docx,doc,xlsx,xls,pptx,ppt}
         serviceName: onlyoffice
 ```
@@ -345,7 +356,7 @@ public class MinioFileStorageImpl implements IFileStorage {
     public MinioFileStorageImpl() {
         this.minioClient = new MinioClient.Builder()
                 .endpoint("http://127.0.0.1:9000")
-                .credentials("ROOTUSER", "12345678")
+                .credentials("ROOTUSER", "CHANGEME123")
                 .build();
     }
 
@@ -427,7 +438,7 @@ public class MinioFileStorageImpl implements IFileStorage {
 ## Third-party Libraries Used
 
 | File Type | Third-party Library |
-|-----------|---------------------|
+|----------|----------|
 | DOCX files | [docx-preview](https://github.com/VolodymyrBaydak/docx-preview) + [JSZip](https://github.com/Stuk/jszip) |
 | XLSX files | [SheetJS](https://github.com/SheetJS/sheetjs) |
 | PPTX files | [pptxviewjs](https://github.com/nicktomach/pptxviewjs) + [Chart.js](https://github.com/chartjs/Chart.js) |
