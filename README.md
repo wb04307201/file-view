@@ -4,7 +4,7 @@
   English | <a href="README.zh-CN.md">中文</a>
 </div>
 
-> A lightweight file preview Starter component for Spring Boot 3.x that supports online preview of 20+ file formats (docx/xlsx/pptx/PDF/BPMN/images/videos/code/3D models/CAD, etc.) with a simple Maven dependency.
+> A lightweight file preview Starter component for Spring Boot that supports online preview of 20+ file formats (docx/xlsx/pptx/PDF/BPMN/images/videos/code/3D models/CAD, etc.) with a simple Maven dependency.
 
 ![Maven Central](https://img.shields.io/maven-central/v/io.github.wb04307201/file-view-spring-boot-starter?style=flat-square)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)

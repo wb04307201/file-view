@@ -4,7 +4,7 @@
   <a href="README.md">English</a> | 中文
 </div>
 
-> 一个 Spring Boot 3.x 的轻量级文件在线预览 Starter 组件，通过简单的 Maven 依赖引入即可为项目提供 docx/xlsx/pptx/PDF/BPMN/图片/视频/代码/3D 模型/CAD 等 20+ 种文件格式的在线预览能力。
+> 一个 Spring Boot 的轻量级文件在线预览 Starter 组件，通过简单的 Maven 依赖引入即可为项目提供 docx/xlsx/pptx/PDF/BPMN/图片/视频/代码/3D 模型/CAD 等 20+ 种文件格式的在线预览能力。
 
 ![Maven Central](https://img.shields.io/maven-central/v/io.github.wb04307201/file-view-spring-boot-starter?style=flat-square)
 [![star](https://gitee.com/wb04307201/file-view/badge/star.svg?theme=dark)](https://gitee.com/wb04307201/file-view)
