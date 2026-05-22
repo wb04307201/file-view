@@ -11,8 +11,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const files = this.files;
         if (files.length === 0) return;
 
+        const totalFiles = files.length;
+        var names = [];
+        for (var i = 0; i < totalFiles; i++) {
+            names.push(files[i].name);
+        }
+        showToast('正在上传 ' + totalFiles + ' 个文件: ' + names.join(', '));
+
         const formData = new FormData();
-        for (let i = 0; i < files.length; i++) {
+        for (var i = 0; i < totalFiles; i++) {
             formData.append('file', files[i]);
         }
 
@@ -22,7 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('上传失败');
             })
             .then(function(data) {
-                showToast('文件上传成功');
+                var count = Array.isArray(data) ? data.length : 1;
+                showToast('上传成功 ' + count + '/' + totalFiles + ' 个文件');
                 document.getElementById('fileInput').value = '';
                 loadData();
             })
