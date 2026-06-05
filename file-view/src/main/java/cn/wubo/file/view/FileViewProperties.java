@@ -72,6 +72,7 @@ public class FileViewProperties {
 
     private boolean enabledListView = true;
     private ApiProperties api = new ApiProperties();
+    private AuthProperties auth = new AuthProperties();
 
     @Data
     public static class ApiProperties {
@@ -94,5 +95,12 @@ public class FileViewProperties {
     public static class StrategyProperties {
         private String syntaxAndPattern;
         private String serviceName;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AuthProperties {
+        private List<String> pathPatterns = List.of("/file/view", "/wopi");
     }
 }
