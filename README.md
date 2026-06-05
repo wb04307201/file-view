@@ -51,7 +51,7 @@
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.1-sb3</version>
+    <version>1.4.1.1-sb3</version>
 </dependency>
 ```
 
