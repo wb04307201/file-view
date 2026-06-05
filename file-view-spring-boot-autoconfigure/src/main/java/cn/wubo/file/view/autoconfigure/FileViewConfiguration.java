@@ -1,10 +1,16 @@
 package cn.wubo.file.view.autoconfigure;
 
 import cn.wubo.file.view.FileViewProperties;
+import cn.wubo.file.view.auth.AuthResult;
+import cn.wubo.file.view.auth.IAuth;
 import cn.wubo.file.view.preview.*;
 import cn.wubo.file.view.storage.IFileStorage;
 import cn.wubo.file.view.storage.dto.FileStorageInfo;
 import cn.wubo.file.view.storage.impl.LocalFileStorageImpl;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -15,11 +21,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.RouterFunctions;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -35,6 +43,56 @@ public class FileViewConfiguration {
     @ConditionalOnMissingBean
     public IFileStorage fileStorage() {
         return new LocalFileStorageImpl();
+    }
+
+    @Bean("wb04307201FileViewAuth")
+    @ConditionalOnMissingBean(IAuth.class)
+    public IAuth fileViewAuth() {
+        return new AllowAllAuth();
+    }
+
+    @Bean
+    public OncePerRequestFilter authFilter(IAuth auth, FileViewProperties properties) {
+        return new OncePerRequestFilter() {
+            @Override
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                    FilterChain filterChain) throws ServletException, IOException {
+                String path = request.getRequestURI();
+                boolean needAuth = properties.getAuth().getPathPatterns().stream()
+                        .anyMatch(pattern -> match(pattern, path));
+                if (needAuth) {
+                    AuthResult result = auth.check(request, path);
+                    if (!result.isAllowed()) {
+                        String redirectUrl = result.getRedirectUrl();
+                        if (redirectUrl != null) {
+                            response.sendRedirect(redirectUrl);
+                        } else {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            String message = result.getMessage() != null ? result.getMessage() : "Access denied";
+                            response.getWriter().write("{\"error\":\"" + message.replace("\"", "\\\"") + "\"}");
+                        }
+                        return;
+                    }
+                }
+                filterChain.doFilter(request, response);
+            }
+
+            private boolean match(String pattern, String path) {
+                if (pattern.equals(path)) {
+                    return true;
+                }
+                if (pattern.endsWith("/*")) {
+                    String prefix = pattern.substring(0, pattern.length() - 1);
+                    return path.startsWith(prefix);
+                }
+                if (pattern.endsWith("/**")) {
+                    String prefix = pattern.substring(0, pattern.length() - 2);
+                    return path.startsWith(prefix);
+                }
+                return false;
+            }
+        };
     }
 
     @Bean

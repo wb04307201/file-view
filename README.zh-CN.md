@@ -435,6 +435,76 @@ public class MinioFileStorageImpl implements IFileStorage {
 }
 ```
 
+### 请求鉴权
+
+默认情况下，`/file/view/*` 和 `/wopi/*` 端点允许未鉴权的访问。如需添加鉴权，只需实现 `IAuth` 接口并注册为 Spring Bean，默认的放行实现将被自动替换。
+
+#### API 鉴权模式（返回 403）
+
+```java
+@Service
+public class TokenAuth implements IAuth {
+    @Override
+    public AuthResult check(HttpServletRequest request, String path) {
+        String token = request.getHeader("X-Api-Token");
+        if (!"your-secret-token".equals(token)) {
+            return AuthResult.deny("无效的 Token");
+        }
+        return AuthResult.allow();
+    }
+}
+```
+
+#### BFF 鉴权模式（302 重定向到登录页）
+
+```java
+@Service
+public class BffAuth implements IAuth {
+    @Override
+    public AuthResult check(HttpServletRequest request, String path) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            // 浏览器未登录，重定向到登录页
+            return AuthResult.redirect("/login?from=" + path);
+        }
+        return AuthResult.allow();
+    }
+}
+```
+
+#### AuthResult 的三种返回结果
+
+| 返回 | HTTP 行为 | 适用场景 |
+|------|----------|---------|
+| `AuthResult.allow()` | 放行请求 | 已登录 / 无需鉴权 |
+| `AuthResult.deny("原因")` | 403 + JSON `{"error":"原因"}` | API 客户端（前端 fetch、OnlyOffice 回调等） |
+| `AuthResult.redirect("/login")` | 302 浏览器重定向 | BFF 模式 — 未登录时跳转到登录页 |
+
+#### 需要鉴权的路径
+
+默认仅对以 `/file/view` 和 `/wopi` 开头的路径进行鉴权。你可以通过 `application.yml` 自定义需要鉴权的路径：
+
+```yaml
+file:
+  view:
+    auth:
+      path-patterns:
+        - /file/view/**    # 所有子路径
+        - /wopi/**
+        - /api/**           # 也保护自定义接口
+        # - /**             # 拦截所有请求
+```
+
+支持的路径匹配模式：
+
+| 模式 | 含义 |
+|------|------|
+| `/file/view` | 精确匹配 |
+| `/file/*` | 直接子路径（一级） |
+| `/file/**` | 所有递归子路径 |
+
+> **注意**: 如果配置了 `/**`，请确保在 `IAuth` 实现中对登录接口放行，避免重定向死循环。
+
 ## 使用的第三方库
 
 | 文件类型 | 第三方库 |
