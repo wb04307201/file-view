@@ -27,7 +27,7 @@
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
 </dependency>
 ```
 
@@ -36,7 +36,7 @@
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.0-sb3</version>
+    <version>1.4.1-sb3</version>
 </dependency>
 ```
 
@@ -434,6 +434,76 @@ public class MinioFileStorageImpl implements IFileStorage {
     }
 }
 ```
+
+### Request Authentication
+
+By default, all `/file/view/*` and `/wopi/*` endpoints allow unauthenticated access. To add authentication, implement the `IAuth` interface and register it as a Spring bean. The default pass-all implementation will be automatically replaced.
+
+#### API-style authentication (403 response)
+
+```java
+@Service
+public class TokenAuth implements IAuth {
+    @Override
+    public AuthResult check(HttpServletRequest request, String path) {
+        String token = request.getHeader("X-Api-Token");
+        if (!"your-secret-token".equals(token)) {
+            return AuthResult.deny("Invalid token");
+        }
+        return AuthResult.allow();
+    }
+}
+```
+
+#### BFF-style authentication (302 redirect to login page)
+
+```java
+@Service
+public class BffAuth implements IAuth {
+    @Override
+    public AuthResult check(HttpServletRequest request, String path) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            // Redirect browser to login page
+            return AuthResult.redirect("/login?from=" + path);
+        }
+        return AuthResult.allow();
+    }
+}
+```
+
+#### AuthResult outcomes
+
+| Return | HTTP behavior | Use case |
+|--------|---------------|----------|
+| `AuthResult.allow()` | Proceed with the request | Authenticated / no auth needed |
+| `AuthResult.deny("reason")` | 403 + JSON `{"error":"reason"}` | API clients (frontend fetch, OnlyOffice callbacks, etc.) |
+| `AuthResult.redirect("/login")` | 302 browser redirect | BFF mode — redirect unauthenticated browser to login page |
+
+#### Path patterns to authenticate
+
+By default, only paths starting with `/file/view` and `/wopi` require authentication. You can customize which paths are protected in `application.yml`:
+
+```yaml
+file:
+  view:
+    auth:
+      path-patterns:
+        - /file/view/**    # all sub-paths
+        - /wopi/**
+        - /api/**           # also protect custom endpoints
+        # - /**             # intercept ALL requests
+```
+
+Supported pattern styles:
+
+| Pattern | Meaning |
+|---------|---------|
+| `/file/view` | Exact match |
+| `/file/*` | Direct sub-paths (one level) |
+| `/file/**` | All recursive sub-paths |
+
+> **Note**: If `/**` is configured, make sure to exclude your login endpoint in the `IAuth` implementation to avoid redirect loops.
 
 ## Third-party Libraries Used
 
