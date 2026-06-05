@@ -15,33 +15,6 @@
 
 ---
 
-## Version Information
-
-> **1.4.0 and above**: Based on JDK 25 + Spring Boot 4.x
-> **1.4.0-sb3**: Based on JDK 17 + Spring Boot 3.x (current branch)
-
-### Maven Dependency
-
-#### JDK 25 + Spring Boot 4.x (Recommended)
-```xml
-<dependency>
-    <groupId>io.github.wb04307201</groupId>
-    <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.1</version>
-</dependency>
-```
-
-#### JDK 17 + Spring Boot 3.x
-```xml
-<dependency>
-    <groupId>io.github.wb04307201</groupId>
-    <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.1-sb3</version>
-</dependency>
-```
-
----
-
 ## Supported File Types
 - Office files (docx, xlsx, pptx)
 - Business Process Management files (bpmn, dmn, cmmn)
@@ -60,11 +33,25 @@
 ## Integration
 
 ### Maven Dependency
+
+> **1.4.0 and above**: Based on JDK 25 + Spring Boot 4.x
+> **1.4.0-sb3**: Based on JDK 17 + Spring Boot 3.x (current branch)
+
+#### JDK 25 + Spring Boot 4.x (Recommended)
 ```xml
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.3.4</version>
+    <version>1.4.1</version>
+</dependency>
+```
+
+#### JDK 17 + Spring Boot 3.x
+```xml
+<dependency>
+    <groupId>io.github.wb04307201</groupId>
+    <artifactId>file-view-spring-boot-starter</artifactId>
+    <version>1.4.1-sb3</version>
 </dependency>
 ```
 
