@@ -155,6 +155,7 @@ The JS library resources are loaded from jsDelivr. If you cannot get resources f
 
 ### Access Built-in Interface for File Upload and Preview
 Visit `http://localhost:8080/file/view`
+You can also drag files from your file manager and drop them anywhere on the page to upload them.
 ![img.png](img.png)
 ![gif.gif](gif.gif)
 > All preview pages include a floating download button in the top-right corner. Hover near the corner to reveal it, then click to download the original file.
