@@ -8,38 +8,41 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('fileInput').addEventListener('change', function() {
-        const files = this.files;
-        if (files.length === 0) return;
-
-        const totalFiles = files.length;
-        var names = [];
-        for (var i = 0; i < totalFiles; i++) {
-            names.push(files[i].name);
-        }
-        showToast('正在上传 ' + totalFiles + ' 个文件: ' + names.join(', '));
-
-        const formData = new FormData();
-        for (var i = 0; i < totalFiles; i++) {
-            formData.append('file', files[i]);
-        }
-
-        fetch('/file/view/upload', { method: 'POST', body: formData })
-            .then(function(response) {
-                if (response.ok) return response.json();
-                throw new Error('上传失败');
-            })
-            .then(function(data) {
-                var count = Array.isArray(data) ? data.length : 1;
-                showToast('上传成功 ' + count + '/' + totalFiles + ' 个文件');
-                document.getElementById('fileInput').value = '';
-                loadData();
-            })
-            .catch(function(error) {
-                showToast('文件上传失败: ' + error.message);
-                console.error('上传错误:', error);
-            });
+        uploadFiles(this.files);
     });
 });
+
+function uploadFiles(files) {
+    if (!files || files.length === 0) return;
+
+    const totalFiles = files.length;
+    var names = [];
+    for (var i = 0; i < totalFiles; i++) {
+        names.push(files[i].name);
+    }
+    showToast('正在上传 ' + totalFiles + ' 个文件: ' + names.join(', '));
+
+    const formData = new FormData();
+    for (var i = 0; i < totalFiles; i++) {
+        formData.append('file', files[i]);
+    }
+
+    fetch('/file/view/upload', { method: 'POST', body: formData })
+        .then(function(response) {
+            if (response.ok) return response.json();
+            throw new Error('上传失败');
+        })
+        .then(function(data) {
+            var count = Array.isArray(data) ? data.length : 1;
+            showToast('上传成功 ' + count + '/' + totalFiles + ' 个文件');
+            document.getElementById('fileInput').value = '';
+            loadData();
+        })
+        .catch(function(error) {
+            showToast('文件上传失败: ' + error.message);
+            console.error('上传错误:', error);
+        });
+}
 
 function loadData() {
     fetch('/file/view/list')
@@ -184,3 +187,47 @@ function showToast(message) {
         toast.className = 'toast';
     }, 3000);
 }
+
+(function setupDragDrop() {
+    var dragCounter = 0;
+    var overlay = document.getElementById('drop-overlay');
+
+    function isFileDrag(e) {
+        return e.dataTransfer
+            && Array.from(e.dataTransfer.types || []).indexOf('Files') !== -1;
+    }
+
+    window.addEventListener('dragenter', function(e) {
+        if (!isFileDrag(e)) return;
+        e.preventDefault();
+        dragCounter++;
+        overlay.hidden = false;
+    });
+
+    window.addEventListener('dragover', function(e) {
+        if (!isFileDrag(e)) return;
+        e.preventDefault();
+        if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+    });
+
+    window.addEventListener('dragleave', function(e) {
+        if (!isFileDrag(e)) return;
+        dragCounter--;
+        if (dragCounter <= 0) {
+            dragCounter = 0;
+            overlay.hidden = true;
+        }
+    });
+
+    window.addEventListener('drop', function(e) {
+        e.preventDefault();
+        dragCounter = 0;
+        overlay.hidden = true;
+        var files = e.dataTransfer && e.dataTransfer.files;
+        if (!files || files.length === 0) {
+            showToast('没有可上传的文件');
+            return;
+        }
+        uploadFiles(files);
+    });
+})();
