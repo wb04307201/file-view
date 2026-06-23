@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文件预览</title>
-    <link rel="stylesheet" type="text/css" href="/static/list.css?v=4"/>
-    <script src="/static/list.js?v=4"></script>
+    <link rel="stylesheet" type="text/css" href="/static/list.css?v=5"/>
+    <script defer src="/static/list.js?v=20260623"></script>
 </head>
 <body>
 <div class="app">
@@ -50,6 +50,18 @@
             </div>
         </div>
     </main>
+
+    <!-- Drag-and-drop overlay (shown only during a file drag) -->
+    <div id="drop-overlay" class="drop-overlay" hidden>
+        <div class="drop-overlay-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p>拖入文件即可上传</p>
+        </div>
+    </div>
 
     <div id="toast" class="toast"></div>
 </div>
