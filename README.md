@@ -42,7 +42,7 @@
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
 </dependency>
 ```
 
@@ -51,7 +51,7 @@
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.1.1-sb3</version>
+    <version>1.4.2-sb3</version>
 </dependency>
 ```
 
@@ -155,6 +155,7 @@ The JS library resources are loaded from jsDelivr. If you cannot get resources f
 
 ### Access Built-in Interface for File Upload and Preview
 Visit `http://localhost:8080/file/view`
+You can also drag files from your file manager and drop them anywhere on the page to upload them.
 ![img.png](img.png)
 ![gif.gif](gif.gif)
 > All preview pages include a floating download button in the top-right corner. Hover near the corner to reveal it, then click to download the original file.
@@ -174,7 +175,7 @@ Visit `http://localhost:8080/file/view`
 The following uses OnlyOffice as an example to illustrate how to extend previews:
 1. Install [OnlyOffice Document Server Developer Edition](https://api.onlyoffice.com/docs/docs-api/get-started/basic-concepts/) using docker
 ```bash
-docker run --name onlyoffice -i -t -d -p 80:80 -e JWT_ENABLED=false -e ALLOW_PRIVATE_IP_ADDRESS=true onlyoffice/documentserver-de
+docker run --name onlyoffice -i -t -d -p 80:80 -e JWT_ENABLED=false -e ALLOW_PRIVATE_IP_ADDRESS=true onlyoffice/documentserver
 ```
 
 2. File preview renderer extension  
