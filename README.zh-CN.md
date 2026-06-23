@@ -175,7 +175,7 @@ file:
 下面以OnlyOffice为例说明如何扩展预览：
 1. 使用docker安装[OnlyOffice文档开发者版](https://api.onlyoffice.com/docs/docs-api/get-started/basic-concepts/)
 ```bash
-docker run --name onlyoffice -i -t -d -p 80:80 -e JWT_ENABLED=false -e ALLOW_PRIVATE_IP_ADDRESS=true onlyoffice/documentserver-de
+docker run --name onlyoffice -i -t -d -p 80:80 -e JWT_ENABLED=false -e ALLOW_PRIVATE_IP_ADDRESS=true onlyoffice/documentserver
 ```
 
 2. 文件预览渲染器扩展  

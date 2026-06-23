@@ -175,7 +175,7 @@ You can also drag files from your file manager and drop them anywhere on the pag
 The following uses OnlyOffice as an example to illustrate how to extend previews:
 1. Install [OnlyOffice Document Server Developer Edition](https://api.onlyoffice.com/docs/docs-api/get-started/basic-concepts/) using docker
 ```bash
-docker run --name onlyoffice -i -t -d -p 80:80 -e JWT_ENABLED=false -e ALLOW_PRIVATE_IP_ADDRESS=true onlyoffice/documentserver-de
+docker run --name onlyoffice -i -t -d -p 80:80 -e JWT_ENABLED=false -e ALLOW_PRIVATE_IP_ADDRESS=true onlyoffice/documentserver
 ```
 
 2. File preview renderer extension  
