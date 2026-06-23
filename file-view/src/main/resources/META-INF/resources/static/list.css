@@ -407,3 +407,40 @@ tbody td {
         display: none;
     }
 }
+
+/* Drag-and-drop overlay */
+.drop-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(59, 130, 246, 0.08);
+    border: 3px dashed var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.drop-overlay[hidden] {
+    display: none;
+}
+
+.drop-overlay-content {
+    background: var(--card);
+    padding: 32px 48px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    color: var(--primary);
+}
+
+.drop-overlay-content svg {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 12px;
+}
+
+.drop-overlay-content p {
+    font-size: 18px;
+    font-weight: 600;
+}
