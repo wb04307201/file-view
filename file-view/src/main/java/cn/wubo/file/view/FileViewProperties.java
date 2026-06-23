@@ -73,7 +73,6 @@ public class FileViewProperties {
     private boolean enabledListView = true;
     private ApiProperties api = new ApiProperties();
     private AuthProperties auth = new AuthProperties();
-    private UploadProperties upload = new UploadProperties();
 
     @Data
     public static class ApiProperties {
@@ -103,19 +102,5 @@ public class FileViewProperties {
     @AllArgsConstructor
     public static class AuthProperties {
         private List<String> pathPatterns = List.of("/file/view", "/wopi");
-    }
-
-    @Data
-    @NoArgsConstructor
-    public static class UploadProperties {
-        private boolean enabled = true;
-        private String chunkSize = "5MB";
-        private String maxFileSize = "10GB";
-        private String sessionTtl = "PT24H";
-        private Integer maxConcurrentChunks = 3;
-        private boolean enableInstantUpload = true;
-        private boolean verifyHashOnComplete = true;
-        private String hashThreshold = "1GB";
-        private String sessionStoreType = "memory";
     }
 }
