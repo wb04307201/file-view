@@ -141,7 +141,7 @@ In `file-view/src/main/resources/META-INF/resources/static/list.css`, find the l
 
 - [ ] **Step 4: Verify file syntax**
 
-Run: `cd C:\developer\IdeaProjects\file-view && node -c file-view/src/main/resources/list.js 2>/dev/null; echo "list.js syntax: $?"`
+Run: `cd C:\developer\IdeaProjects\file-view && node -c file-view/src/main/resources/META-INF/resources/static/list.js 2>/dev/null; echo "list.js syntax: $?"`
 Expected: prints `list.js syntax: 0`. (We are syntax-checking `list.js` only as a sanity check that the working tree is still parseable; we did not modify `list.js` in this task.)
 
 For `list.html` and `list.css`, no automated syntax check is available — instead, run a quick visual check by serving the file and opening it in a browser. Skip this if you cannot run a dev server: the change is purely additive HTML + CSS and will not break the existing page.
