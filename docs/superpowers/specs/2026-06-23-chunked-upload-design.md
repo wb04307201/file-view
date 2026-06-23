@@ -71,13 +71,13 @@ public record ContentFingerprint(String sha256) {}
 
 ### 2.3 Fallback for non-chunked IFileStorage
 
-If a user provides a custom `IFileStorage` (e.g., `MinioFileStorageImpl`) that does **not** implement `IChunkedFileStorage`, the controller transparently falls back:
+If a user provides a custom `IFileStorage` (e.g., `MinioFileStorageImpl`) that does **not** implement `IChunkedFileStorage`, the controller transparently falls back to a streaming-buffer path:
 
-1. Buffer all chunks in memory (capped by `max-file-size`).
-2. Call the legacy `IFileStorage.upload(bytes, ...)` once.
-3. Clean up chunk files.
+1. Stream chunks into a temp file at `{temp}/upload/{uploadId}/merged.bin` (avoids full in-memory buffering — safe even for 10 GB files).
+2. Call the legacy `IFileStorage.upload(bytes, ...)` once with the assembled bytes.
+3. Delete the temp file and chunk files.
 
-This preserves the "extension point" promise: any existing user keeps working without code changes.
+This preserves the "extension point" promise: any existing user keeps working without code changes, and the fallback does **not** defeat the purpose of chunked transport (the network still happens in small chunks; only the final upload to the legacy storage backend is monolithic).
 
 ---
 
