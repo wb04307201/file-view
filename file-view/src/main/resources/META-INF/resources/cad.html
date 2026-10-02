@@ -34,13 +34,16 @@
         }
     </style>
     <script src="/static/common.js"></script>
-    <!-- @mlightcad/* 1.7.3+ 的 ESM 使用无扩展名相对导入（'./dxf'、'./base/'），
-     浏览器无法解析，jsdelivr 也不补全；esm.sh 会把这些依赖预打包并转译，
-     因此整个 CAD 依赖图收敛为一条入口。 -->
+    <!-- cad-simple-viewer 1.7.3+ 的 ESM 使用无扩展名相对导入（'./dxf'、'./base/'），
+     浏览器无法解析，jsdelivr 也不补全；esm.sh 会把这些依赖预打包并转译。
+     1.7.3 起 DWG 解析器不再随包自动注册，必须先手动登记（见下方 registerDwgParser），
+     否则 openDocument 对 .dwg 一律返回 false。 -->
 <script type="importmap">
     {
         "imports": {
-            "@mlightcad/cad-simple-viewer": "https://esm.sh/@mlightcad/cad-simple-viewer@1.7.3"
+            "@mlightcad/cad-simple-viewer": "https://esm.sh/@mlightcad/cad-simple-viewer@1.7.3",
+            "@mlightcad/libredwg-converter": "https://esm.sh/@mlightcad/libredwg-converter@3.15.1",
+            "@mlightcad/data-model": "https://esm.sh/@mlightcad/data-model@1.15.1"
         }
     }
     </script>
@@ -51,10 +54,23 @@
 </div>
 <script type="module">
     import { AcApDocManager } from '@mlightcad/cad-simple-viewer';
+    import { AcDbLibreDwgConverter } from '@mlightcad/libredwg-converter';
+    import { AcDbDatabaseConverterManager, AcDbFileType } from '@mlightcad/data-model';
 
     const id = getUrlParam('id');
     const container = document.getElementById('cad-container');
     const loading = document.getElementById('loading');
+
+    // 1.7.3 起 DWG 解析器不再随 createInstance 自动注册，DXF 仍自动注册。
+    // 必须显式登记 DWG，否则 openDocument('.dwg') 直接返回 false。
+    function registerDwgParser(workerUrl) {
+        const converter = new AcDbLibreDwgConverter({
+            convertByEntityType: false,
+            useWorker: true,
+            parserWorkerUrl: workerUrl
+        });
+        AcDbDatabaseConverterManager.instance.register(AcDbFileType.DWG, converter);
+    }
 
     if (!id) {
         container.innerHTML = '<div class="empty">缺少文件 ID</div>';
@@ -73,13 +89,16 @@
             if (!contentResp.ok) throw new Error('文件内容获取失败 (HTTP ' + contentResp.status + ')');
             const arrayBuffer = await contentResp.arrayBuffer();
 
+            const dwgParserUrl = '/static/cad-workers/libredwg-parser-worker.js';
+            registerDwgParser(dwgParserUrl);
+
             await AcApDocManager.createInstance({
                 container: container,
                 autoResize: true,
                 useMainThreadDraw: true,
                 webworkerFileUrls: {
                     dxfParser: '/static/cad-workers/dxf-parser-worker.js',
-                    dwgParser: '/static/cad-workers/libredwg-parser-worker.js',
+                    dwgParser: dwgParserUrl,
                     mtextRender: '/static/cad-workers/mtext-renderer-worker.js'
                 }
             });
