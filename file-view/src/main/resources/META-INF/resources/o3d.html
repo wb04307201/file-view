@@ -29,12 +29,8 @@
 <div id="online_3d_viewer"></div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // online-3d-viewer 自带 three 作为内部依赖，不再单独加载 three
         const resources = [
-            {
-                url: '/static/three/0.184.0/three.min.js',
-                cdn: 'https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.min.js',
-                type: 'js'
-            },
             {
                 url: '/static/online-3d-viewer/0.18.0/o3dv.min.js',
                 cdn: 'https://cdn.jsdelivr.net/npm/online-3d-viewer@0.18.0/build/o3dv.min.js',
