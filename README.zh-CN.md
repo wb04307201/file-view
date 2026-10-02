@@ -42,7 +42,7 @@
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3</version>
 </dependency>
 ```
 
@@ -51,7 +51,7 @@
 <dependency>
     <groupId>io.github.wb04307201</groupId>
     <artifactId>file-view-spring-boot-starter</artifactId>
-    <version>1.4.2-sb3</version>
+    <version>1.4.3-sb3</version>
 </dependency>
 ```
 
@@ -303,7 +303,7 @@ docker run -p 9000:9000 -p 9001:9001 --name minio -e "MINIO_ROOT_USER=ROOTUSER" 
 <dependency>
     <groupId>io.minio</groupId>
     <artifactId>minio</artifactId>
-    <version>8.6.0</version>
+    <version>9.0.3</version>
 </dependency>
 ```
 
@@ -326,7 +326,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -359,7 +358,7 @@ public class MinioFileStorageImpl implements IFileStorage {
                     PutObjectArgs.builder()
                             .bucket(BUCKET_NAME)
                             .object(filePath.toString())
-                            .stream(new ByteArrayInputStream(content), content.length, -1)
+                            .stream(new ByteArrayInputStream(content), (long) content.length, -1L)
                             .contentType(mimeType)
                             .build()
             );
@@ -367,7 +366,7 @@ public class MinioFileStorageImpl implements IFileStorage {
             FileStorageInfo fpi = new FileStorageInfo(id, fileName, content.length, mimeType, filePath.toString(), version);
             fileStorageInfos.add(fpi);
             return fpi;
-        } catch (NoSuchAlgorithmException | IOException | InvalidKeyException | InvalidResponseException | InsufficientDataException | InternalException | ErrorResponseException | XmlParserException | ServerException e) {
+        } catch (NoSuchAlgorithmException | MinioException e) {
             throw new LocalFileStorageException(e.getMessage(), e);
         }
     }
@@ -395,8 +394,7 @@ public class MinioFileStorageImpl implements IFileStorage {
                             .build()
             );
             return is.readAllBytes();
-        } catch (IOException | InvalidKeyException | InvalidResponseException | NoSuchAlgorithmException |
-                 InsufficientDataException | InternalException | ErrorResponseException | XmlParserException | ServerException e) {
+        } catch (IOException | MinioException e) {
             throw new LocalFileStorageException(e.getMessage(), e);
         }
     }
@@ -413,8 +411,7 @@ public class MinioFileStorageImpl implements IFileStorage {
                                 .build()
                 );
                 fileStorageInfos.remove(fsi);
-            } catch (IOException | InvalidKeyException | InvalidResponseException | NoSuchAlgorithmException |
-                     InsufficientDataException | InternalException | ErrorResponseException | XmlParserException | ServerException e) {
+            } catch (MinioException e) {
                 throw new LocalFileStorageException(e.getMessage(), e);
             }
         }

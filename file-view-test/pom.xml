@@ -24,8 +24,10 @@
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
-            <version>8.6.0</version>
+            <version>9.0.3</version>
             <exclusions>
+                <!-- okhttp 5.x 是 Kotlin Multiplatform 发布：okhttp 坐标下只有 KMP 元数据 jar（767 字节，不含类），
+                     真实类在 okhttp-jvm 坐标下。Maven 不读 Gradle module metadata，故需显式换坐标。 -->
                 <exclusion>
                     <groupId>com.squareup.okhttp3</groupId>
                     <artifactId>okhttp</artifactId>
@@ -34,8 +36,8 @@
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.12.0</version>
+            <artifactId>okhttp-jvm</artifactId>
+            <version>5.3.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
