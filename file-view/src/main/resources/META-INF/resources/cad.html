@@ -34,16 +34,13 @@
         }
     </style>
     <script src="/static/common.js"></script>
-    <script type="importmap">
+    <!-- @mlightcad/* 1.7.3+ 的 ESM 使用无扩展名相对导入（'./dxf'、'./base/'），
+     浏览器无法解析，jsdelivr 也不补全；esm.sh 会把这些依赖预打包并转译，
+     因此整个 CAD 依赖图收敛为一条入口。 -->
+<script type="importmap">
     {
         "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js",
-            "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/",
-            "three/examples/jsm/controls/OrbitControls": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/controls/OrbitControls.js",
-            "three/examples/jsm/libs/stats.module": "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/libs/stats.module.js",
-            "lodash-es": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/lodash.js",
-            "@mlightcad/data-model": "https://cdn.jsdelivr.net/npm/@mlightcad/data-model@1.7.33/dist/data-model.js",
-            "@mlightcad/cad-simple-viewer": "https://cdn.jsdelivr.net/npm/@mlightcad/cad-simple-viewer@1.5.0/dist/index.js"
+            "@mlightcad/cad-simple-viewer": "https://esm.sh/@mlightcad/cad-simple-viewer@1.7.3"
         }
     }
     </script>
